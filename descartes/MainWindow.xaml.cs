@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Forms;
 
 namespace descartes
 {
@@ -23,5 +24,16 @@ namespace descartes
         {
             InitializeComponent();
         }
+
+        private void buttonBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+            if (folderBrowser.ShowDialog().Equals(System.Windows.Forms.DialogResult.OK))
+            {
+                textBoxInputFolder.Text = folderBrowser.SelectedPath;
+            }
+        }
+
+        
     }
 }
