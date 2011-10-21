@@ -1,0 +1,19 @@
+Descartes: Multiformat image selection/discard wizard.
+
+From an input directory, containing a list of files in different formats with same names 
+(typically, the output of a DSLR camera in RAW + JPEG mode), 
+assists the user to select and discard images for the next workflow phase or simply to
+remove undesired captures.
+This is done by a "lightbox" window running the full sequence of images, with five buttons:
+Select / discard; Next/Prev and Abort.
+
+At the end of the process, user is prompted to choose between separating the two file lists 
+in two different folders, deleting the discards list or maybe more options I come up with :P
+
+The i18n part will be done when the main functionality is achieved.
+
+Platform: .net 4.0 (WPF with C#).
+
+Any form of help will deserve a chilling beer in some close future :)
+
+Manuel Gómez
