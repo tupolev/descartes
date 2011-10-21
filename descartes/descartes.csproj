@@ -70,6 +70,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DirectoryHandler.cs" />
     <Compile Include="Lightbox.xaml.cs">
       <DependentUpon>Lightbox.xaml</DependentUpon>
     </Compile>
@@ -104,6 +105,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Annotate_Default.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\progressbar.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,156 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+
+namespace descartes {
+    public class DirectoryHandler {
+        private String path = "";
+        public String Path
+        {
+            get { return path; }
+            set { path = value; }
+        }
+        public ImageList inputList, selectedList, discardedList;
+        private DirectoryInfo dirInfo;
+        public DirectoryHandler(String path) {
+            this.inputList = new ImageList();
+            this.selectedList = new ImageList();
+            this.discardedList = new ImageList();
+            this.Path = path;
+        }
+
+        public Int32 fillInputList() {
+            this.dirInfo = new DirectoryInfo(this.Path);
+            IEnumerable<FileInfo> fileList = this.dirInfo.EnumerateFiles("*");
+            List<String> files = new List<String>();
+            foreach(FileInfo item in fileList.ToArray()) {
+                
+            }
+            
+            for (Int32 i = 0; i < fileList.Count(); i++) {
+                files.Add(System.IO.Path.GetFileNameWithoutExtension(fileList.ElementAt(i).Name));
+            }
+            files.Sort();
+            files.Intersect(files);
+
+
+            foreach (String item in files) {
+                fileList = this.dirInfo.EnumerateFiles(item + ".*");
+                List<descartes.File> fil = new List<descartes.File>();
+                for (Int32 i = 0; i < fileList.Count(); i++) {
+                    fil.Add(new descartes.File(
+                                            this.Path,
+                                            fileList.ElementAt(i).Name,
+                                            fileList.ElementAt(i).Extension
+                                            
+                        ));
+                }
+                this.inputList.add(new Image(fil));
+            }
+            return this.inputList.count();
+        }
+
+    }
+
+    public class File {
+        private String path = "";
+        public String Path {
+            get { return path; }
+            set { path = value; }
+        }
+        
+        private String name = "";
+        public String Name {
+            get { return name; }
+            set { name = value; }
+        }
+        
+        private String ext = "";
+        public String Ext {
+            get { return ext; }
+            set { ext = value; }
+        }
+
+        public File(String path, String name, String ext){
+            this.Path = path;
+            this.Name = name;
+            this.Ext = ext;
+          
+        }
+
+        public bool verify() {
+            return System.IO.File.Exists(this.Path + @"\" + this.Name + "." + this.Ext);
+        }
+
+    }
+
+    public class Image {
+        private Boolean selected = false;
+        public Boolean Selected
+        {
+            get { return selected; }
+            set { selected = value; }
+        }
+        
+        private List<File> fileList;
+
+        public String getFileTitle() {
+            return Path.GetFileNameWithoutExtension(this.fileList.First().Name);
+        }
+
+        public List<File> getFiles()
+        {
+            return this.fileList;
+        }
+            
+        public Image(List<File> fileList) {
+            this.fileList = fileList;
+        }
+      
+        public Boolean isImage() {
+            return true;
+        }
+    }
+
+    public class ImageList {
+        private Int32 current = 0;
+        public Int32 Current
+        {
+            get { return current; }
+            set { current = value; }
+        }
+
+        private List<Image> imageList;
+
+        public List<Image> getList() {
+            return this.imageList;
+        }
+
+        public ImageList() {
+            this.imageList = new List<Image>();
+        }
+
+        public Boolean add(Image image) {
+            this.imageList.Add(image);
+            return (this.imageList.LastIndexOf(image) >= 0);
+        }
+
+        public Int32 count() {
+            return this.imageList.Count;
+        }
+
+        public Boolean selectCurrent() {
+            this.imageList.ElementAt(this.Current).Selected = true;
+            return this.imageList.ElementAt(this.Current).Selected;
+        }
+
+        public Boolean discardCurrent()
+        {
+            this.imageList.ElementAt(this.Current).Selected = false;
+            return this.imageList.ElementAt(this.Current).Selected = false;
+        }
+    }
+
+}
