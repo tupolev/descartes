@@ -12,11 +12,24 @@
                 <Label Background="#FFEBEBEB" Content="0" Height="34" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="22,149,0,0" Name="labelNumFiles" VerticalAlignment="Top" Width="118" />
                 <ListView Height="229" HorizontalAlignment="Left" Margin="18,244,0,0" Name="listViewFilesFound" VerticalAlignment="Top" Width="312" />
                 <Label Content="Files found" Height="34" HorizontalAlignment="Left" Margin="18,204,0,0" Name="labelFilesFound" VerticalAlignment="Top" Width="327" />
-                <Button Height="105" HorizontalAlignment="Left" Margin="451,299,0,0" Name="buttonStartProcess" VerticalAlignment="Top" Width="221" FontSize="32" FontStyle="Normal" Foreground="Black" Cursor="Hand" Background="{x:Null}" Content="Start process" FontFamily="Segoe UI" Click="buttonStartProcess_Click"></Button>
+                <Button Height="105" HorizontalAlignment="Left" Margin="451,299,0,0" Name="buttonStartProcess" VerticalAlignment="Top" Width="221" FontSize="32" FontStyle="Normal" Foreground="Black" Cursor="Hand" Background="{x:Null}" Content="Start process" FontFamily="Segoe UI" Click="buttonStartProcess_Click" IsEnabled="False"></Button>
                 <ProgressBar Height="38" HorizontalAlignment="Left" Margin="263,218,0,0" Name="progressBarLoading" VerticalAlignment="Top" Width="259" IsIndeterminate="True" Visibility="Hidden" />
             </Grid>
         </TabItem>
-        <TabItem FontSize="16" FontWeight="Bold" Header="2 - Process" Name="tabItemProcess" />
+        <TabItem FontSize="16" FontWeight="Bold" Header="2 - Process" Name="tabItemProcess">
+            <Grid Height="463" Name="grid1" Width="781">
+                <Image Height="103" HorizontalAlignment="Left" Margin="638,62,0,0" Name="imageNext" Stretch="Fill" VerticalAlignment="Top" Width="137" OpacityMask="#FF5C5353" Source="/descartes;component/Images/no.gif" />
+                <Image Height="103" HorizontalAlignment="Left" Margin="6,62,0,0" Name="imagePrev" Stretch="Fill" VerticalAlignment="Top" Width="137" OpacityMask="#FF5C5353" Source="/descartes;component/Images/no.gif" />
+                <Image Height="317" HorizontalAlignment="Left" Margin="149,62,0,0" Name="imageCurrent" Stretch="Fill" VerticalAlignment="Top" Width="483" Source="/descartes;component/Images/no.gif" />
+                <Button Content="Select" Height="33" HorizontalAlignment="Left" Margin="393,402,0,0" Name="buttonSelect" VerticalAlignment="Top" Width="93" Background="#FF5CFF00" Click="buttonSelect_Click" />
+                <Button Content="Discard" Height="33" HorizontalAlignment="Left" Margin="275,402,0,0" Name="buttonDiscard" VerticalAlignment="Top" Width="93" Background="#FFFF2B2B" Click="buttonDiscard_Click" />
+                <Button Content="&lt; Previous image" Height="33" HorizontalAlignment="Left" Margin="95,402,0,0" Name="buttonPrevImage" VerticalAlignment="Top" Width="145" Click="buttonPrevImage_Click" />
+                <Button Content="Next image &gt;" Height="33" HorizontalAlignment="Left" Margin="524,402,0,0" Name="buttonNextImage" VerticalAlignment="Top" Width="145" Click="buttonNextImage_Click" />
+                <Label Content="Current image" Height="34" HorizontalAlignment="Left" Margin="333,34,0,0" Name="labelCurrentImage" VerticalAlignment="Top" Width="120" />
+                <Label Content="Prev. image" Height="34" HorizontalAlignment="Left" Margin="6,34,0,0" Name="labelPrevImage" VerticalAlignment="Top" Width="120" />
+                <Label Content="Next image" Height="34" HorizontalAlignment="Right" Margin="0,34,6,0" Name="labelNextImage" VerticalAlignment="Top" Width="98" />
+            </Grid>
+        </TabItem>
         <TabItem FontSize="16" FontWeight="Bold" Header="3 - The ouput" />
         <TabItem FontSize="16" FontWeight="Bold" Header="99 - About" />
     </TabControl>
