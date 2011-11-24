@@ -30,10 +30,13 @@ namespace descartes {
             }
             
             for (Int32 i = 0; i < fileList.Count(); i++) {
-                files.Add(System.IO.Path.GetFileNameWithoutExtension(fileList.ElementAt(i).Name));
+                if (files.IndexOf(System.IO.Path.GetFileNameWithoutExtension(fileList.ElementAt(i).Name)) < 0)
+                {
+                    files.Add(System.IO.Path.GetFileNameWithoutExtension(fileList.ElementAt(i).Name));
+                }
+                
             }
             files.Sort();
-            files.Intersect(files);
 
 
             foreach (String item in files) {
@@ -52,6 +55,47 @@ namespace descartes {
             return this.inputList.count();
         }
 
+        public String getImagePathForItem(int item, String type = ".JPG")
+        {
+            String path = "";
+            if (item >= 0 && item < this.inputList.count())
+            {
+                List<descartes.File> fl = this.inputList.getList().ElementAt(item).getFiles();
+                Boolean found = false;
+
+                for (int i = 0; (i < fl.Count && !found); i++)
+                {
+                    if (fl.ElementAt(i).Ext == type)
+                    {
+                        path = fl.ElementAt(i).Path + @"\" + fl.ElementAt(i).Name;
+                        found = true;
+                    }
+                }
+
+            }
+            return path;
+        }
+
+        public static String getImagePathForItem(DirectoryHandler dh, int item, String type = ".JPG")
+        {
+            String path = "";
+            if (item >= 0 && item < dh.inputList.count())
+            {
+                List<descartes.File> fl = dh.inputList.getList().ElementAt(item).getFiles();
+                Boolean found = false;
+
+                for (int i = 0; (i < fl.Count && !found); i++)
+                {
+                    if (fl.ElementAt(i).Ext == type)
+                    {
+                        path = fl.ElementAt(i).Path + @"\" + fl.ElementAt(i).Name;
+                        found = true;
+                    }
+                }
+
+            }
+            return path;
+        }
     }
 
     public class File {

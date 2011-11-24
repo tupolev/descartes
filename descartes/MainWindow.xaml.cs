@@ -80,34 +80,18 @@ namespace descartes
             dh.inputList.Current = 0;
             imagePrev.Source = unavailableImage;
 
-            String pathCurr = getImagePathForItem(dh.inputList.Current, ".JPG");
+            String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
             imageCurrent.Source = System.IO.File.Exists(pathCurr) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
+            labelCurrentImageFilename.Content = pathCurr;
 
-            String pathNext = getImagePathForItem(dh.inputList.Current + 1, ".JPG");
+            String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
             BitmapImage bmp = System.IO.File.Exists(pathNext) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
             imageNext.Source = bmp;
+            labelNextImageFilename.Content = pathNext;
 
         }
 
-        private String getImagePathForItem(int item, String type = ".JPG") {
-            String path = "";
-            if (item >= 0 && item < dh.inputList.count())
-            {
-                List<descartes.File> fl = dh.inputList.getList().ElementAt(item).getFiles();
-                Boolean found = false;
-                
-                for (int i = 0; (i < fl.Count && !found); i++)
-                {
-                    if (fl.ElementAt(i).Ext == type)
-                    {
-                        path = fl.ElementAt(i).Path + @"\" + fl.ElementAt(i).Name;
-                        found = true;
-                    }
-                }
-                
-            }
-            return path;
-        }
+        
 
         private void buttonPrevImage_Click(object sender, RoutedEventArgs e)
         {
@@ -116,14 +100,17 @@ namespace descartes
             {
                 dh.inputList.Current--;
 
-                String pathPrev = getImagePathForItem(dh.inputList.Current - 1, ".JPG");
+                String pathPrev = dh.getImagePathForItem(dh.inputList.Current - 1, ".JPG");
                 imagePrev.Source = System.IO.File.Exists(pathPrev) ? new BitmapImage(new Uri(pathPrev)) : unavailableImage;
+                labelPrevImageFilename.Content = pathPrev;
 
-                String pathCurr = getImagePathForItem(dh.inputList.Current, ".JPG");
+                String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
                 imageCurrent.Source = System.IO.File.Exists(pathCurr) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
-
-                String pathNext = getImagePathForItem(dh.inputList.Current + 1, ".JPG");
+                labelCurrentImageFilename.Content = pathCurr;
+                
+                String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
                 imageNext.Source = System.IO.File.Exists(pathNext) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
+                labelNextImageFilename.Content = pathNext;
             }
             else
             {
@@ -139,14 +126,15 @@ namespace descartes
                 dh.inputList.Current++;
 
 
-                String pathPrev = getImagePathForItem(dh.inputList.Current - 1, ".JPG");
+                String pathPrev = dh.getImagePathForItem(dh.inputList.Current - 1, ".JPG");
                 imagePrev.Source = System.IO.File.Exists(pathPrev) ? new BitmapImage(new Uri(pathPrev)) : unavailableImage;
-
-                String pathCurr = getImagePathForItem(dh.inputList.Current, ".JPG");
+                labelPrevImageFilename.Content = pathPrev;
+                String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
                 imageCurrent.Source = System.IO.File.Exists(pathCurr) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
-
-                String pathNext = getImagePathForItem(dh.inputList.Current + 1, ".JPG");
+                labelCurrentImageFilename.Content = pathCurr;
+                String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
                 imageNext.Source = System.IO.File.Exists(pathNext) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
+                labelNextImageFilename.Content = pathNext;
             }
             else {
                 imagePrev.Source = unavailableImage;

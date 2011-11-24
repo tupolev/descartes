@@ -27,7 +27,10 @@
                 <Button Content="Next image &gt;" Height="33" HorizontalAlignment="Left" Margin="524,402,0,0" Name="buttonNextImage" VerticalAlignment="Top" Width="145" Click="buttonNextImage_Click" />
                 <Label Content="Current image" Height="34" HorizontalAlignment="Left" Margin="333,34,0,0" Name="labelCurrentImage" VerticalAlignment="Top" Width="120" />
                 <Label Content="Prev. image" Height="34" HorizontalAlignment="Left" Margin="6,34,0,0" Name="labelPrevImage" VerticalAlignment="Top" Width="120" />
-                <Label Content="Next image" Height="34" HorizontalAlignment="Right" Margin="0,34,6,0" Name="labelNextImage" VerticalAlignment="Top" Width="98" />
+                <Label Content="Next image" Height="34" HorizontalAlignment="Right" Margin="0,34,45,0" Name="labelNextImage" VerticalAlignment="Top" Width="98" />
+                <Label Height="27" HorizontalAlignment="Left" Margin="158,343,0,0" Name="labelCurrentImageFilename" VerticalAlignment="Top" Width="347" FontWeight="Normal" FontSize="12" />
+                <Label FontSize="8" FontWeight="Normal" Height="27" HorizontalAlignment="Left" Margin="6,138,0,0" Name="labelPrevImageFilename" VerticalAlignment="Top" Width="137" />
+                <Label FontSize="8" FontWeight="Normal" Height="27" HorizontalAlignment="Left" Margin="638,138,0,0" Name="labelNextImageFilename" VerticalAlignment="Top" Width="137" />
             </Grid>
         </TabItem>
         <TabItem FontSize="16" FontWeight="Bold" Header="3 - The ouput" />
