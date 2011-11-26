@@ -1,36 +1,45 @@
 ﻿<Window x:Class="descartes.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Descartes" Height="562" Width="814" Icon="/descartes;component/Images/Annotate_Default.ico">
-    <TabControl ClipToBounds="True" Name="tabControl1" UseLayoutRounding="True" Height="533" Width="791">
+        Title="Descartes" Icon="/descartes;component/Images/Annotate_Default.ico" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="562" d:DesignWidth="814" SizeToContent="WidthAndHeight" MinWidth="1020" MinHeight="700" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" Loaded="Window_Loaded" Height="700" Width="1020">
+    <TabControl ClipToBounds="False" Name="tabControl1" UseLayoutRounding="True" Height="670" Width="1001" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <TabControl.ItemBindingGroup>
+            <BindingGroup />
+        </TabControl.ItemBindingGroup>
         <TabItem DataContext="{Binding}" FontSize="16" FontWeight="Bold" Header="1 - Input" Name="tabItemInput" UseLayoutRounding="True">
-            <Grid Height="491" Width="788">
+            <Grid Height="678" Width="994" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Label Content="Select folder to review..." Height="34" HorizontalAlignment="Left" Margin="22,31,0,0" Name="labelReviewFolder" VerticalAlignment="Top" Width="327" />
-                <TextBox FontSize="20" Height="40" HorizontalAlignment="Left" Margin="22,71,0,0" Name="textBoxInputFolder" Text="C:\" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="646" TextChanged="textBoxInputFolder_TextChanged" />
-                <Button Content="Browse" Height="40" HorizontalAlignment="Left" Margin="674,71,0,0" Name="buttonBrowse" VerticalAlignment="Top" Width="86" Click="buttonBrowse_Click" />
+                <TextBox FontSize="20" Height="40" HorizontalAlignment="Left" Margin="22,71,0,0" Name="textBoxInputFolder" Text="C:\" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="814" TextChanged="textBoxInputFolder_TextChanged" />
+                <Button Content="Browse" Height="40" HorizontalAlignment="Right" Margin="0,72,52,0" Name="buttonBrowse" VerticalAlignment="Top" Width="86" Click="buttonBrowse_Click" />
                 <Label Content="unique file titles found" Height="34" HorizontalAlignment="Left" Margin="146,149,0,0" Name="labelUniqueFilesFound" VerticalAlignment="Top" Width="327" />
                 <Label Background="#FFEBEBEB" Content="0" Height="34" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="22,149,0,0" Name="labelNumFiles" VerticalAlignment="Top" Width="118" />
-                <ListView Height="229" HorizontalAlignment="Left" Margin="18,244,0,0" Name="listViewFilesFound" VerticalAlignment="Top" Width="312" />
-                <Label Content="Files found" Height="34" HorizontalAlignment="Left" Margin="18,204,0,0" Name="labelFilesFound" VerticalAlignment="Top" Width="327" />
-                <Button Height="105" HorizontalAlignment="Left" Margin="451,299,0,0" Name="buttonStartProcess" VerticalAlignment="Top" Width="221" FontSize="32" FontStyle="Normal" Foreground="Black" Cursor="Hand" Background="{x:Null}" Content="Start process" FontFamily="Segoe UI" Click="buttonStartProcess_Click" IsEnabled="False"></Button>
+                <ListView Height="385" HorizontalAlignment="Left" Margin="18,244,0,0" Name="listViewFilesFound" VerticalAlignment="Top" Width="477" />
+                <Label Content="Files found" Height="34" HorizontalAlignment="Left" Margin="15,217,0,0" Name="labelFilesFound" VerticalAlignment="Top" Width="327" />
+                <Button Height="105" HorizontalAlignment="Left" Margin="647,377,0,0" Name="buttonStartProcess" VerticalAlignment="Top" Width="221" FontSize="32" FontStyle="Normal" Foreground="Black" Cursor="Hand" Background="{x:Null}" Content="Start process" FontFamily="Segoe UI" Click="buttonStartProcess_Click" IsEnabled="False"></Button>
                 <ProgressBar Height="38" HorizontalAlignment="Left" Margin="263,218,0,0" Name="progressBarLoading" VerticalAlignment="Top" Width="259" IsIndeterminate="True" Visibility="Hidden" />
             </Grid>
         </TabItem>
         <TabItem FontSize="16" FontWeight="Bold" Header="2 - Process" Name="tabItemProcess">
-            <Grid Height="463" Name="grid1" Width="781">
-                <Image Height="103" HorizontalAlignment="Left" Margin="638,62,0,0" Name="imageNext" Stretch="Fill" VerticalAlignment="Top" Width="137" OpacityMask="#FF5C5353" Source="/descartes;component/Images/no.gif" />
-                <Image Height="103" HorizontalAlignment="Left" Margin="6,62,0,0" Name="imagePrev" Stretch="Fill" VerticalAlignment="Top" Width="137" OpacityMask="#FF5C5353" Source="/descartes;component/Images/no.gif" />
-                <Image Height="317" HorizontalAlignment="Left" Margin="149,62,0,0" Name="imageCurrent" Stretch="Fill" VerticalAlignment="Top" Width="483" Source="/descartes;component/Images/no.gif" />
-                <Button Content="Select" Height="33" HorizontalAlignment="Left" Margin="393,402,0,0" Name="buttonSelect" VerticalAlignment="Top" Width="93" Background="#FF5CFF00" Click="buttonSelect_Click" />
-                <Button Content="Discard" Height="33" HorizontalAlignment="Left" Margin="275,402,0,0" Name="buttonDiscard" VerticalAlignment="Top" Width="93" Background="#FFFF2B2B" Click="buttonDiscard_Click" />
-                <Button Content="&lt; Previous image" Height="33" HorizontalAlignment="Left" Margin="95,402,0,0" Name="buttonPrevImage" VerticalAlignment="Top" Width="145" Click="buttonPrevImage_Click" />
-                <Button Content="Next image &gt;" Height="33" HorizontalAlignment="Left" Margin="524,402,0,0" Name="buttonNextImage" VerticalAlignment="Top" Width="145" Click="buttonNextImage_Click" />
-                <Label Content="Current image" Height="34" HorizontalAlignment="Left" Margin="333,34,0,0" Name="labelCurrentImage" VerticalAlignment="Top" Width="120" />
-                <Label Content="Prev. image" Height="34" HorizontalAlignment="Left" Margin="6,34,0,0" Name="labelPrevImage" VerticalAlignment="Top" Width="120" />
-                <Label Content="Next image" Height="34" HorizontalAlignment="Right" Margin="0,34,45,0" Name="labelNextImage" VerticalAlignment="Top" Width="98" />
-                <Label Height="27" HorizontalAlignment="Left" Margin="158,343,0,0" Name="labelCurrentImageFilename" VerticalAlignment="Top" Width="347" FontWeight="Normal" FontSize="12" />
-                <Label FontSize="8" FontWeight="Normal" Height="27" HorizontalAlignment="Left" Margin="6,138,0,0" Name="labelPrevImageFilename" VerticalAlignment="Top" Width="137" />
-                <Label FontSize="8" FontWeight="Normal" Height="27" HorizontalAlignment="Left" Margin="638,138,0,0" Name="labelNextImageFilename" VerticalAlignment="Top" Width="137" />
+            <Grid Height="630" Name="gridTabProcess" Width="996" VerticalAlignment="Top" HorizontalAlignment="Stretch" ClipToBounds="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="524*" />
+                    <ColumnDefinition Width="472*" />
+                </Grid.ColumnDefinitions>
+                <Image Height="103" HorizontalAlignment="Left" Margin="330,38,0,0" Name="imageNext" Stretch="Fill" VerticalAlignment="Top" Width="137" OpacityMask="#FF5C5353" Source="/descartes;component/Images/no.gif" Grid.Column="1" />
+                <Image Height="103" HorizontalAlignment="Left" Margin="7,38,0,0" Name="imagePrev" Stretch="Fill" VerticalAlignment="Top" Width="137" OpacityMask="#FF5C5353" Source="/descartes;component/Images/no.gif" />
+                <Image Height="498" HorizontalAlignment="Left" Margin="150,38,0,0" Name="imageCurrent" Stretch="UniformToFill" VerticalAlignment="Top" Width="698" Source="/descartes;component/Images/no.gif" Grid.ColumnSpan="2" />
+                <Button Content="Select" Height="33" HorizontalAlignment="Left" Margin="33,575,0,0" Name="buttonSelect" VerticalAlignment="Top" Width="93" Background="#FF5CFF00" Click="buttonSelect_Click" Grid.Column="1" />
+                <Button Content="Discard" Height="33" HorizontalAlignment="Left" Margin="331,575,0,0" Name="buttonDiscard" VerticalAlignment="Top" Width="93" Background="#FFFF2B2B" Click="buttonDiscard_Click" />
+                <Button Content="&lt; Previous image" Height="33" HorizontalAlignment="Left" Margin="151,575,0,0" Name="buttonPrevImage" VerticalAlignment="Top" Width="145" Click="buttonPrevImage_Click" />
+                <Button Content="Next image &gt;" Height="33" HorizontalAlignment="Left" Margin="164,575,0,0" Name="buttonNextImage" VerticalAlignment="Top" Width="145" Click="buttonNextImage_Click" Grid.Column="1" />
+                <Label Content="Current image" Height="34" HorizontalAlignment="Left" Margin="386,10,0,0" Name="labelCurrentImage" VerticalAlignment="Top" Width="120" />
+                <Label Content="Prev. image" Height="34" HorizontalAlignment="Left" Margin="24,10,0,0" Name="labelPrevImage" VerticalAlignment="Top" Width="120" FlowDirection="RightToLeft" />
+                <Label Content="Next image" Height="34" HorizontalAlignment="Right" Margin="0,10,44,0" Name="labelNextImage" VerticalAlignment="Top" Width="98" Grid.Column="1" />
+                <Label Height="27" HorizontalAlignment="Left" Margin="159,509,0,0" Name="labelCurrentImageFilename" VerticalAlignment="Top" Width="347" FontWeight="Normal" FontSize="12" />
+                <Label FontSize="8" FontWeight="Normal" Height="27" HorizontalAlignment="Left" Margin="7,114,0,0" Name="labelPrevImageFilename" VerticalAlignment="Top" Width="137" />
+                <Label FontSize="8" FontWeight="Normal" Height="27" HorizontalAlignment="Left" Margin="330,114,0,0" Name="labelNextImageFilename" VerticalAlignment="Top" Width="137" Grid.Column="1" />
+                <Label Height="34" HorizontalAlignment="Left" Margin="430,574,0,0" Name="labelCurrentImageStatus" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Center" Content="UNRATED" Grid.ColumnSpan="2" />
+                <Label Content="(0 of 0)" Height="34" HorizontalAlignment="Right" Margin="0,10,242,0" Name="labelCurrentImagePositionInList" VerticalAlignment="Top" Width="250" Grid.ColumnSpan="2" />
             </Grid>
         </TabItem>
         <TabItem FontSize="16" FontWeight="Bold" Header="3 - The ouput" />

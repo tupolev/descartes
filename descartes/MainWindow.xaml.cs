@@ -83,12 +83,13 @@ namespace descartes
             String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
             imageCurrent.Source = System.IO.File.Exists(pathCurr) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
             labelCurrentImageFilename.Content = pathCurr;
+            setCurrentImageStatusLabel();
 
             String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
             BitmapImage bmp = System.IO.File.Exists(pathNext) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
             imageNext.Source = bmp;
             labelNextImageFilename.Content = pathNext;
-
+            labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
         }
 
         
@@ -107,6 +108,7 @@ namespace descartes
                 String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
                 imageCurrent.Source = System.IO.File.Exists(pathCurr) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
                 labelCurrentImageFilename.Content = pathCurr;
+                setCurrentImageStatusLabel();
                 
                 String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
                 imageNext.Source = System.IO.File.Exists(pathNext) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
@@ -116,6 +118,7 @@ namespace descartes
             {
                 imagePrev.Source = unavailableImage;
             }
+            labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
         }
 
         private void buttonNextImage_Click(object sender, RoutedEventArgs e)
@@ -129,9 +132,12 @@ namespace descartes
                 String pathPrev = dh.getImagePathForItem(dh.inputList.Current - 1, ".JPG");
                 imagePrev.Source = System.IO.File.Exists(pathPrev) ? new BitmapImage(new Uri(pathPrev)) : unavailableImage;
                 labelPrevImageFilename.Content = pathPrev;
+
                 String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
                 imageCurrent.Source = System.IO.File.Exists(pathCurr) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
                 labelCurrentImageFilename.Content = pathCurr;
+                setCurrentImageStatusLabel();
+                
                 String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
                 imageNext.Source = System.IO.File.Exists(pathNext) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
                 labelNextImageFilename.Content = pathNext;
@@ -139,6 +145,7 @@ namespace descartes
             else {
                 imagePrev.Source = unavailableImage;
             }
+            labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
         }
 
 
@@ -146,11 +153,41 @@ namespace descartes
         private void buttonSelect_Click(object sender, RoutedEventArgs e)
         {
             dh.inputList.selectCurrent();
+            setCurrentImageStatusLabel();
         }
 
         private void buttonDiscard_Click(object sender, RoutedEventArgs e)
         {
             dh.inputList.discardCurrent();
+            setCurrentImageStatusLabel();
+        }
+
+
+        private String getCurrentImagePositionCaption() {
+            return "(" + (dh.inputList.Current + 1).ToString() + " of " + dh.inputList.count().ToString() + ")";
+        }
+
+        private void setCurrentImageStatusLabel() {
+            if (dh.inputList.getList().ElementAt(dh.inputList.Current).Status.Equals("selected"))
+            {
+
+                labelCurrentImageStatus.Foreground = Brushes.Green;
+                labelCurrentImageStatus.Content = "SELECTED";
+            }
+            else if (dh.inputList.getList().ElementAt(dh.inputList.Current).Status.Equals("discarded"))
+            {
+                labelCurrentImageStatus.Foreground = Brushes.Red;
+                labelCurrentImageStatus.Content = "DISCARDED";
+            }
+            else {
+                labelCurrentImageStatus.Foreground = Brushes.DarkGray;
+                labelCurrentImageStatus.Content = "UNRATED";            
+            }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

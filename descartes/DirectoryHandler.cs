@@ -131,11 +131,11 @@ namespace descartes {
     }
 
     public class Image {
-        private Boolean selected = false;
-        public Boolean Selected
+        private String status = "unrated";
+        public String Status
         {
-            get { return selected; }
-            set { selected = value; }
+            get { return status; }
+            set { status = value; }
         }
         
         private List<File> fileList;
@@ -185,15 +185,15 @@ namespace descartes {
             return this.imageList.Count;
         }
 
-        public Boolean selectCurrent() {
-            this.imageList.ElementAt(this.Current).Selected = true;
-            return this.imageList.ElementAt(this.Current).Selected;
+        public String selectCurrent() {
+            this.imageList.ElementAt(this.Current).Status = "selected";
+            return this.imageList.ElementAt(this.Current).Status;
         }
 
-        public Boolean discardCurrent()
+        public String discardCurrent()
         {
-            this.imageList.ElementAt(this.Current).Selected = false;
-            return this.imageList.ElementAt(this.Current).Selected = false;
+            this.imageList.ElementAt(this.Current).Status = "discarded";
+            return this.imageList.ElementAt(this.Current).Status;
         }
     }
 
