@@ -90,6 +90,8 @@ namespace descartes
             imageNext.Source = bmp;
             labelNextImageFilename.Content = pathNext;
             labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
+            tabItemProcess.IsEnabled = true;
+            tabItemOutput.IsEnabled = true;
         }
 
         
@@ -153,12 +155,16 @@ namespace descartes
         private void buttonSelect_Click(object sender, RoutedEventArgs e)
         {
             dh.inputList.selectCurrent();
+            dh.removeFromSelectedList(dh.inputList.getList().ElementAt(dh.inputList.Current));
+            dh.addToSelectedList(dh.inputList.getList().ElementAt(dh.inputList.Current));
             setCurrentImageStatusLabel();
         }
 
         private void buttonDiscard_Click(object sender, RoutedEventArgs e)
         {
             dh.inputList.discardCurrent();
+            dh.removeFromDiscardedList(dh.inputList.getList().ElementAt(dh.inputList.Current));
+            dh.addToDiscardedList(dh.inputList.getList().ElementAt(dh.inputList.Current));
             setCurrentImageStatusLabel();
         }
 
@@ -188,6 +194,49 @@ namespace descartes
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void tabItemOutput_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            
+            
+        }
+
+        private void tabItemProcess_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void tabControlMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (tabControlMain.SelectedIndex == 2) {
+                foreach (Image item in dh.selectedList.getList())
+                {
+                    String extensions = "";
+                    foreach (descartes.File file in item.getFiles())
+                    {
+                        extensions += "(" + file.Ext + ")";
+                    }
+
+                    listViewSelectedImages.Items.Add(
+                            item.getFileTitle() + " " + extensions
+                        );
+                }
+                labelNumSelectedImages.Content = "(" + dh.selectedList.count().ToString() + ")";
+                foreach (Image item in dh.discardedList.getList())
+                {
+                    String extensions = "";
+                    foreach (descartes.File file in item.getFiles())
+                    {
+                        extensions += "(" + file.Ext + ")";
+                    }
+
+                    listViewDiscardedImages.Items.Add(
+                            item.getFileTitle() + " " + extensions
+                        );
+                }
+                labelNumSelectedImages.Content = "(" + dh.discardedList.count().ToString() + ")";
+            }
         }
     }
 }

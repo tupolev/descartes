@@ -96,6 +96,23 @@ namespace descartes {
             }
             return path;
         }
+
+        public bool addToSelectedList(Image img) {
+            return this.selectedList.add(img);
+        }
+
+        public bool addToDiscardedList(Image img) {
+            return this.discardedList.add(img);
+        }
+
+        public bool removeFromSelectedList(Image img) {
+            return this.selectedList.getList().Remove(img);
+        }
+
+        public bool removeFromDiscardedList(Image img)
+        {
+            return this.discardedList.getList().Remove(img);
+        }
     }
 
     public class File {
