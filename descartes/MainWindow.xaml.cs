@@ -191,52 +191,72 @@ namespace descartes
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void buttonRestart_Click(object sender, RoutedEventArgs e)
         {
-
+            buttonStartProcess_Click(sender, e);
         }
 
-        private void tabItemOutput_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void buttonNextStep_Click(object sender, RoutedEventArgs e)
         {
-            
-            
-        }
-
-        private void tabItemProcess_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void tabControlMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (tabControlMain.SelectedIndex == 2) {
-                foreach (Image item in dh.selectedList.getList())
+            listViewSelectedImages.Items.Clear();
+            listViewDiscardedImages.Items.Clear();
+            foreach (Image item in dh.selectedList.getList())
+            {
+                String extensions = "";
+                foreach (descartes.File file in item.getFiles())
                 {
-                    String extensions = "";
-                    foreach (descartes.File file in item.getFiles())
-                    {
-                        extensions += "(" + file.Ext + ")";
-                    }
-
-                    listViewSelectedImages.Items.Add(
-                            item.getFileTitle() + " " + extensions
-                        );
+                    extensions += "(" + file.Ext + ")";
                 }
-                labelNumSelectedImages.Content = "(" + dh.selectedList.count().ToString() + ")";
-                foreach (Image item in dh.discardedList.getList())
-                {
-                    String extensions = "";
-                    foreach (descartes.File file in item.getFiles())
-                    {
-                        extensions += "(" + file.Ext + ")";
-                    }
 
-                    listViewDiscardedImages.Items.Add(
-                            item.getFileTitle() + " " + extensions
-                        );
-                }
-                labelNumSelectedImages.Content = "(" + dh.discardedList.count().ToString() + ")";
+                listViewSelectedImages.Items.Add(
+                        item.getFileTitle() + " " + extensions
+                    );
             }
+            labelNumSelectedImages.Content = "(" + dh.selectedList.count().ToString() + ")";
+            foreach (Image item in dh.discardedList.getList())
+            {
+                String extensions = "";
+                foreach (descartes.File file in item.getFiles())
+                {
+                    extensions += "(" + file.Ext + ")";
+                }
+
+                listViewDiscardedImages.Items.Add(
+                        item.getFileTitle() + " " + extensions
+                    );
+            }
+            labelNumDiscardedImages.Content = "(" + dh.discardedList.count().ToString() + ")";
+            tabItemOutput.Focus();
         }
+
+        private void buttonEndProcess_Click(object sender, RoutedEventArgs e) {
+            progressBarOutputProcess.Minimum = 0;
+            progressBarOutputProcess.Maximum = dh.discardedList.count() + dh.selectedList.count();
+
+            if (comboBoxSelectedImagesOutputFormat.SelectedIndex == 0) {
+                //only xml
+            }
+            else if (comboBoxSelectedImagesOutputFormat.SelectedIndex == 1) {
+                //only files
+            }
+            else { 
+                //both xml and files
+            }
+
+            if (comboBoxDiscardedImagesOutputFormat.SelectedIndex == 0)
+            {
+                //only xml
+            }
+            else if (comboBoxDiscardedImagesOutputFormat.SelectedIndex == 1)
+            {
+                //only files
+            }
+            else
+            {
+                //both xml and files
+            }
+
+        }
+        
     }
 }
