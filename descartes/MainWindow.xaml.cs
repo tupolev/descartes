@@ -27,9 +27,7 @@ namespace descartes
         {
             InitializeComponent();
             app_path = System.Reflection.Assembly.GetExecutingAssembly().Location;
-
             unavailableImage = new BitmapImage(new Uri(System.IO.Path.GetDirectoryName(app_path) + @"\Images\no.gif"));
-            //'C:\Users\tupolev\Documents\Visual Studio 2010\Projects\descartes\descartes\bin\Debug\Images\no.gif'
         }
 
         private void buttonBrowse_Click(object sender, RoutedEventArgs e)
@@ -37,27 +35,11 @@ namespace descartes
             FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
             if (folderBrowser.ShowDialog().Equals(System.Windows.Forms.DialogResult.OK))
             {
-                listViewFilesFound.Items.Clear();
                 textBoxInputFolder.Text = folderBrowser.SelectedPath;
                 textBoxOutputSelectedFolder.Text = textBoxInputFolder.Text + @"\selected\";
                 textBoxOutputDiscardedFolder.Text = textBoxInputFolder.Text + @"\discarded\";
-                progressBarLoading.Visibility = System.Windows.Visibility.Visible;
-                labelNumFiles.Content = "Loading";
-                dh = new DirectoryHandler(textBoxInputFolder.Text);
-                labelNumFiles.Content = dh.fillInputList();
-                foreach (Image item in dh.inputList.getList()) {
-
-                    String extensions = "";
-                    foreach (descartes.File file in item.getFiles()) {
-                        extensions += "(" + file.Ext + ")";
-                    }
-                    
-                    listViewFilesFound.Items.Add(
-                            item.getFileTitle() + " " + extensions
-                        );
-                }
-
-                progressBarLoading.Visibility = System.Windows.Visibility.Hidden;
+            
+                this.buttonReloadFilesFound_Click(sender, e);   
                
             }
         }
@@ -104,6 +86,8 @@ namespace descartes
 
         private void buttonPrevImage_Click(object sender, RoutedEventArgs e)
         {
+            System.Windows.Input.Cursor oldCursor = this.Cursor;
+            this.Cursor = System.Windows.Input.Cursors.AppStarting;
             if ((Int32)dh.inputList.Current < dh.inputList.count()
                 && (Int32)dh.inputList.Current > 0)
             {
@@ -137,10 +121,14 @@ namespace descartes
             }
             labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
             checkInputListBounds();
+            this.Cursor = oldCursor;
         }
 
         private void buttonNextImage_Click(object sender, RoutedEventArgs e)
         {
+            System.Windows.Input.Cursor oldCursor = this.Cursor;
+            this.Cursor = System.Windows.Input.Cursors.AppStarting;
+            
             if ((Int32)dh.inputList.Current < dh.inputList.count()
                 && (Int32)dh.inputList.Current >= 0)
             {
@@ -173,6 +161,7 @@ namespace descartes
             }
             labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
             checkInputListBounds();
+            this.Cursor = oldCursor;
         }
 
         private void checkInputListBounds() { 
@@ -387,6 +376,30 @@ namespace descartes
                 textBoxOutputDiscardedFolder.Background = Brushes.LightCoral;
                 if (buttonStartProcess != null) this.buttonStartProcess.IsEnabled = false;
             }
+        }
+
+        private void buttonReloadFilesFound_Click(object sender, RoutedEventArgs e)
+        {
+            listViewFilesFound.Items.Clear();
+            progressBarLoading.Visibility = System.Windows.Visibility.Visible;
+            labelNumFiles.Content = "Loading";
+            dh = new DirectoryHandler(textBoxInputFolder.Text);
+            labelNumFiles.Content = dh.fillInputList();
+            foreach (Image item in dh.inputList.getList())
+            {
+
+                String extensions = "";
+                foreach (descartes.File file in item.getFiles())
+                {
+                    extensions += "(" + file.Ext + ")";
+                }
+
+                listViewFilesFound.Items.Add(
+                        item.getFileTitle() + " " + extensions
+                    );
+            }
+
+            progressBarLoading.Visibility = System.Windows.Visibility.Hidden;
         }
         
     }

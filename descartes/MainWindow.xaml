@@ -9,9 +9,9 @@
         <TabItem DataContext="{Binding}" FontSize="16" FontWeight="Bold" Header="Step 1: The input" Name="tabItemInput" UseLayoutRounding="True">
             <Grid Height="678" Width="994" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Label Content="Select folder to review..." Height="34" HorizontalAlignment="Left" Margin="22,31,0,0" Name="labelReviewFolder" VerticalAlignment="Top" Width="327" />
-                <TextBox FontSize="20" Height="40" HorizontalAlignment="Left" Margin="22,71,0,0" Name="textBoxInputFolder" Text="C:\" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="814" TextChanged="textBoxInputFolder_TextChanged" />
-                <Button Content="Browse" Height="40" HorizontalAlignment="Right" Margin="0,72,52,0" Name="buttonBrowse" VerticalAlignment="Top" Width="86" Click="buttonBrowse_Click" Cursor="Hand" />
-                <Label Content="unique file titles found" Height="34" HorizontalAlignment="Left" Margin="648,185,0,0" Name="labelUniqueFilesFound" VerticalAlignment="Top" Width="327" />
+                <TextBox FontSize="20" Height="40" HorizontalAlignment="Left" Margin="22,71,0,0" Name="textBoxInputFolder" Text="C:\" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="859" TextChanged="textBoxInputFolder_TextChanged" />
+                <Button Content="Browse" Height="40" HorizontalAlignment="Right" Margin="0,72,19,0" Name="buttonBrowse" VerticalAlignment="Top" Width="86" Click="buttonBrowse_Click" Cursor="Hand" />
+                <Label Content="unique file titles found" Height="34" HorizontalAlignment="Left" Margin="648,185,0,0" Name="labelUniqueFilesFound" VerticalAlignment="Top" Width="233" />
                 <Label Background="#FFEBEBEB" Content="0" Height="34" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="521,185,0,0" Name="labelNumFiles" VerticalAlignment="Top" Width="118" />
                 <ListView Height="443" HorizontalAlignment="Left" Margin="22,185,0,0" Name="listViewFilesFound" VerticalAlignment="Top" Width="477" />
                 <Label Content="Files found" Height="34" HorizontalAlignment="Left" Margin="18,157,0,0" Name="labelFilesFound" VerticalAlignment="Top" Width="327" />
@@ -23,6 +23,7 @@
                 <Label Content="Destination folder for discarded images" Height="34" HorizontalAlignment="Left" Margin="519,344,0,0" Name="labelOutputDiscardedFolder" VerticalAlignment="Top" Width="454" />
                 <Button Content="Browse" Height="40" HorizontalAlignment="Right" Margin="0,279,21,0" Name="buttonBrowseSelectedFolder" VerticalAlignment="Top" Width="86" Click="buttonBrowseSelectedFolder_Click" Cursor="Hand" />
                 <Button Content="Browse" Height="40" HorizontalAlignment="Right" Margin="0,0,19,262" Name="buttonBrowseDiscardedFolder" VerticalAlignment="Bottom" Width="86" Click="buttonBrowseDiscardedFolder_Click" Cursor="Hand" />
+                <Button Content="Reload" Cursor="Hand" Height="40" HorizontalAlignment="Right" Margin="0,180,19,0" Name="buttonReloadFilesFound" VerticalAlignment="Top" Width="86" Click="buttonReloadFilesFound_Click" />
             </Grid>
         </TabItem>
         <TabItem FontSize="16" FontWeight="Bold" Header="Step 2: The process" Name="tabItemProcess" IsEnabled="False">
