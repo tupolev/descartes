@@ -328,8 +328,9 @@ namespace descartes
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            tabControlMain.Width = this.Width;
-            tabControlMain.Height = this.Height;
+            //tabControlMain.Width = this.Width;
+            //tabControlMain.Height = this.Height;
+            //this.UpdateLayout();
         }
 
         private void buttonBrowseSelectedFolder_Click(object sender, RoutedEventArgs e)
