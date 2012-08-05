@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace descartes {
     public class DirectoryHandler {
@@ -12,6 +13,78 @@ namespace descartes {
             get { return path; }
             set { path = value; }
         }
+
+        private String outputDiscardedPath = "";
+        public String OutputDiscardedPath
+        {
+            get { return outputDiscardedPath; }
+            set { outputDiscardedPath = value; }
+        }
+
+        private String outputSelectedPath = "";
+        public String OutputSelectedPath
+        {
+            get { return outputSelectedPath; }
+            set { outputSelectedPath = value; }
+        }
+
+        private Boolean generateListFileForSelectedFiles = false;
+        public Boolean GenerateListFileForSelectedFiles
+        {
+            get { return generateListFileForSelectedFiles; }
+            set { generateListFileForSelectedFiles = value; }
+        }
+
+        private Boolean generateListFileForDiscardedFiles = false;
+        public Boolean GenerateListFileForDiscardedFiles
+        {
+            get { return generateListFileForDiscardedFiles; }
+            set { generateListFileForDiscardedFiles = value; }
+        }
+
+        private Boolean generateFileStructureForSelectedFiles = false;
+        public Boolean GenerateFileStructureForSelectedFiles
+        {
+            get { return generateFileStructureForSelectedFiles; }
+            set { generateFileStructureForSelectedFiles = value; }
+        }
+
+        private Boolean generateFileStructureForDiscardedFiles = false;
+        public Boolean GenerateFileStructureForDiscardedFiles
+        {
+            get { return generateFileStructureForDiscardedFiles; }
+            set { generateFileStructureForDiscardedFiles = value; }
+        }
+
+        private string discardedFilesListFileFullName = "";
+        public string DiscardedFilesListFileFullName
+        {
+            get { return discardedFilesListFileFullName; }
+            set { discardedFilesListFileFullName = value; }
+        }
+
+        private string selectedFilesListFileFullName = "";
+        public string SelectedFilesListFileFullName
+        {
+            get { return selectedFilesListFileFullName; }
+            set { selectedFilesListFileFullName = value; }
+        }
+
+        private Boolean keepCopyOfDiscardedFiles = false;
+        public Boolean KeepCopyOfDiscardedFiles
+        {
+            get { return keepCopyOfDiscardedFiles; }
+            set { keepCopyOfDiscardedFiles = value; }
+        }
+
+        private Boolean keepCopyOfSelectedFiles = false;
+        public Boolean KeepCopyOfSelectedFiles
+        {
+            get { return keepCopyOfSelectedFiles; }
+            set { keepCopyOfSelectedFiles = value; }
+        }
+        
+
         public ImageList inputList, selectedList, discardedList;
         private DirectoryInfo dirInfo;
         public DirectoryHandler(String path) {
@@ -113,6 +186,19 @@ namespace descartes {
         {
             return this.discardedList.getList().Remove(img);
         }
+
+        public void checkAndCreateOutputDirs() {
+            try
+            {
+                if (!Directory.Exists(this.OutputDiscardedPath))
+                    Directory.CreateDirectory(this.OutputDiscardedPath);
+                if (!Directory.Exists(this.OutputSelectedPath))
+                    Directory.CreateDirectory(this.OutputSelectedPath);
+            }
+            catch (Exception ex) {
+                Debug.WriteLine(ex.Message);
+            }
+        }
     }
 
     public class File {
@@ -142,7 +228,28 @@ namespace descartes {
         }
 
         public bool verify() {
-            return System.IO.File.Exists(this.Path + @"\" + this.Name + "." + this.Ext);
+            return System.IO.File.Exists(this.Path + @"\" + this.Name);
+        }
+
+        public bool move(string destFileFullPath, bool keepCopy = false) {
+            bool ret = true;
+            try
+            {
+                if (keepCopy)
+                    System.IO.File.Copy(this.GetFullName(), destFileFullPath);
+                else
+                    System.IO.File.Move(this.GetFullName(), destFileFullPath);
+            }
+            catch (Exception ex) {
+                Debug.WriteLine(ex.Message);
+                ret = false;
+            } 
+            return ret;    
+        }
+
+        public String GetFullName()
+        {
+            return this.Path + @"\" + this.Name;
         }
 
     }

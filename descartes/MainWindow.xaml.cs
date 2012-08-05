@@ -21,7 +21,7 @@ namespace descartes
     public partial class MainWindow : Window
     {
         public DirectoryHandler dh;
-        public BitmapImage unavailableImage;
+        public BitmapImage unavailableImage, prevImage, nextImage, currentImage;
         public String app_path;
         public MainWindow()
         {
@@ -37,8 +37,10 @@ namespace descartes
             FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
             if (folderBrowser.ShowDialog().Equals(System.Windows.Forms.DialogResult.OK))
             {
+                listViewFilesFound.Items.Clear();
                 textBoxInputFolder.Text = folderBrowser.SelectedPath;
-                
+                textBoxOutputSelectedFolder.Text = textBoxInputFolder.Text + @"\selected\";
+                textBoxOutputDiscardedFolder.Text = textBoxInputFolder.Text + @"\discarded\";
                 progressBarLoading.Visibility = System.Windows.Visibility.Visible;
                 labelNumFiles.Content = "Loading";
                 dh = new DirectoryHandler(textBoxInputFolder.Text);
@@ -76,9 +78,12 @@ namespace descartes
 
         private void buttonStartProcess_Click(object sender, RoutedEventArgs e)
         {
-            tabItemProcess.Focus();
+            
             dh.inputList.Current = 0;
             imagePrev.Source = unavailableImage;
+
+            dh.OutputSelectedPath = textBoxOutputSelectedFolder.Text;
+            dh.OutputDiscardedPath = textBoxOutputDiscardedFolder.Text;
 
             String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
             imageCurrent.Source = System.IO.File.Exists(pathCurr) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
@@ -92,6 +97,7 @@ namespace descartes
             labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
             tabItemProcess.IsEnabled = true;
             tabItemOutput.IsEnabled = true;
+            tabItemProcess.Focus();
         }
 
         
@@ -104,16 +110,25 @@ namespace descartes
                 dh.inputList.Current--;
 
                 String pathPrev = dh.getImagePathForItem(dh.inputList.Current - 1, ".JPG");
-                imagePrev.Source = System.IO.File.Exists(pathPrev) ? new BitmapImage(new Uri(pathPrev)) : unavailableImage;
+                prevImage = null;
+                prevImage = (System.IO.File.Exists(pathPrev)) ? new BitmapImage(new Uri(pathPrev)) : unavailableImage;
+                imagePrev.Source = prevImage;
+                prevImage = null;
                 labelPrevImageFilename.Content = pathPrev;
 
                 String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
-                imageCurrent.Source = System.IO.File.Exists(pathCurr) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
+                currentImage = null;
+                currentImage = (System.IO.File.Exists(pathCurr)) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
+                imageCurrent.Source = currentImage;
+                currentImage = null; 
                 labelCurrentImageFilename.Content = pathCurr;
                 setCurrentImageStatusLabel();
                 
                 String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
-                imageNext.Source = System.IO.File.Exists(pathNext) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
+                nextImage = null;
+                nextImage = (System.IO.File.Exists(pathNext)) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
+                imageNext.Source = nextImage;
+                prevImage = null; 
                 labelNextImageFilename.Content = pathNext;
             }
             else
@@ -121,6 +136,7 @@ namespace descartes
                 imagePrev.Source = unavailableImage;
             }
             labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
+            checkInputListBounds();
         }
 
         private void buttonNextImage_Click(object sender, RoutedEventArgs e)
@@ -130,26 +146,58 @@ namespace descartes
             {
                 dh.inputList.Current++;
 
-
                 String pathPrev = dh.getImagePathForItem(dh.inputList.Current - 1, ".JPG");
-                imagePrev.Source = System.IO.File.Exists(pathPrev) ? new BitmapImage(new Uri(pathPrev)) : unavailableImage;
+                prevImage = null;
+                prevImage = (System.IO.File.Exists(pathPrev)) ? new BitmapImage(new Uri(pathPrev)) : unavailableImage;
+                imagePrev.Source = prevImage;
+                prevImage = null;
                 labelPrevImageFilename.Content = pathPrev;
 
                 String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
-                imageCurrent.Source = System.IO.File.Exists(pathCurr) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
+                currentImage = null;
+                currentImage = (System.IO.File.Exists(pathCurr)) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
+                imageCurrent.Source = currentImage;
+                currentImage = null;
                 labelCurrentImageFilename.Content = pathCurr;
                 setCurrentImageStatusLabel();
-                
+
                 String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
-                imageNext.Source = System.IO.File.Exists(pathNext) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
+                nextImage = null;
+                nextImage = (System.IO.File.Exists(pathNext)) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
+                imageNext.Source = nextImage;
+                prevImage = null;
                 labelNextImageFilename.Content = pathNext;
             }
             else {
                 imagePrev.Source = unavailableImage;
             }
             labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
+            checkInputListBounds();
         }
 
+        private void checkInputListBounds() { 
+            //check prev button
+            if (dh.inputList.count() > 0 && (Int32)dh.inputList.Current != 0)
+            {
+                buttonPrevImage.IsEnabled = true;
+            }
+            else {
+                buttonPrevImage.IsEnabled = false;    
+            }
+
+            //check next button
+            if (dh.inputList.count() > 0
+                    && (Int32)dh.inputList.Current < dh.inputList.count() -1
+                )
+            {
+                buttonNextImage.IsEnabled = true;
+            }
+            else
+            {
+                buttonNextImage.IsEnabled = false;
+            }
+
+        }
 
 
         private void buttonSelect_Click(object sender, RoutedEventArgs e)
@@ -233,29 +281,112 @@ namespace descartes
             progressBarOutputProcess.Minimum = 0;
             progressBarOutputProcess.Maximum = dh.discardedList.count() + dh.selectedList.count();
 
-            if (comboBoxSelectedImagesOutputFormat.SelectedIndex == 0) {
-                //only xml
-            }
-            else if (comboBoxSelectedImagesOutputFormat.SelectedIndex == 1) {
-                //only files
-            }
-            else { 
-                //both xml and files
-            }
+            dh.GenerateListFileForSelectedFiles = (comboBoxSelectedImagesOutputFormat.SelectedIndex == 1 || comboBoxSelectedImagesOutputFormat.SelectedIndex == 2);
+            dh.GenerateListFileForDiscardedFiles = (comboBoxDiscardedImagesOutputFormat.SelectedIndex == 1 || comboBoxDiscardedImagesOutputFormat.SelectedIndex == 2);
+            dh.GenerateFileStructureForSelectedFiles = (comboBoxSelectedImagesOutputFormat.SelectedIndex == 0|| comboBoxSelectedImagesOutputFormat.SelectedIndex == 2);
+            dh.GenerateFileStructureForDiscardedFiles = (comboBoxDiscardedImagesOutputFormat.SelectedIndex == 0 || comboBoxDiscardedImagesOutputFormat.SelectedIndex == 2);
+            dh.DiscardedFilesListFileFullName = dh.OutputDiscardedPath + @"\..\descartes.discarded.lst";
+            dh.SelectedFilesListFileFullName = dh.OutputSelectedPath + @"\..\descartes.selected.lst";
+            dh.KeepCopyOfDiscardedFiles = (comboBoxDiscardedImagesMoveCopy.SelectedIndex == 2);
+            dh.KeepCopyOfSelectedFiles = (comboBoxSelectedImagesMoveCopy.SelectedIndex == 2);
 
-            if (comboBoxDiscardedImagesOutputFormat.SelectedIndex == 0)
-            {
-                //only xml
+            if (dh.GenerateFileStructureForDiscardedFiles || dh.GenerateFileStructureForSelectedFiles)
+                dh.checkAndCreateOutputDirs();
+
+            //start collect process with discarded files
+            StreamWriter fileWriter = new StreamWriter(dh.DiscardedFilesListFileFullName);
+            foreach (Image item in dh.discardedList.getList()) {
+                foreach (File file in item.getFiles()) {
+                    //write discarded files list file
+                    if (dh.GenerateListFileForDiscardedFiles)
+                        fileWriter.WriteLine(file.Name);
+                    
+                    //write discarded files structure
+                    if (dh.GenerateFileStructureForDiscardedFiles) {
+                        file.move(dh.OutputDiscardedPath + @"\" + file.Name, dh.KeepCopyOfDiscardedFiles);     
+                    }
+                    progressBarOutputProcess.Value++;
+                    progressBarOutputProcess.UpdateLayout();
+                }
             }
-            else if (comboBoxDiscardedImagesOutputFormat.SelectedIndex == 1)
+            fileWriter.Flush();
+            fileWriter.Close();
+            fileWriter.Dispose();
+
+            //next collect process with selected files
+            fileWriter = new StreamWriter(dh.SelectedFilesListFileFullName);
+            foreach (Image item in dh.selectedList.getList()) {
+                foreach (File file in item.getFiles()) {
+                    //selectedFilesPlainList.Add(file.ToString());
+                    if (dh.GenerateListFileForSelectedFiles)
+                        fileWriter.WriteLine(file.Name);
+
+                    if (dh.GenerateFileStructureForSelectedFiles) {
+                        //write selected files structure
+                        file.move(dh.OutputSelectedPath + @"\" + file.Name, dh.KeepCopyOfSelectedFiles);  
+                    }
+
+                    progressBarOutputProcess.Value++;
+                    progressBarOutputProcess.UpdateLayout();
+                }
+            }
+            fileWriter.Flush();
+            fileWriter.Close();
+            fileWriter.Dispose();
+
+            System.Windows.Forms.MessageBox.Show("Process finished!");
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            tabControlMain.Width = this.Width;
+            tabControlMain.Height = this.Height;
+        }
+
+        private void buttonBrowseSelectedFolder_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+            if (folderBrowser.ShowDialog().Equals(System.Windows.Forms.DialogResult.OK))
             {
-                //only files
+                textBoxOutputSelectedFolder.Text = folderBrowser.SelectedPath;
+            }
+        }
+
+        private void buttonBrowseDiscardedFolder_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+            if (folderBrowser.ShowDialog().Equals(System.Windows.Forms.DialogResult.OK))
+            {
+                textBoxOutputDiscardedFolder.Text = folderBrowser.SelectedPath;
+            }
+        }
+
+        private void textBoxOutputSelectedFolder_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!textBoxOutputSelectedFolder.Text.Equals(""))
+            {
+                textBoxOutputSelectedFolder.Background = Brushes.LightGreen;
+                if (buttonStartProcess != null) this.buttonStartProcess.IsEnabled = true;
             }
             else
             {
-                //both xml and files
+                textBoxOutputSelectedFolder.Background = Brushes.LightCoral;
+                if (buttonStartProcess != null) this.buttonStartProcess.IsEnabled = false;
             }
+        }
 
+        private void textBoxOutputDiscardedFolder_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!textBoxOutputDiscardedFolder.Text.Equals(""))
+            {
+                textBoxOutputDiscardedFolder.Background = Brushes.LightGreen;
+                if (buttonStartProcess != null) this.buttonStartProcess.IsEnabled = true;
+            }
+            else
+            {
+                textBoxOutputDiscardedFolder.Background = Brushes.LightCoral;
+                if (buttonStartProcess != null) this.buttonStartProcess.IsEnabled = false;
+            }
         }
         
     }
