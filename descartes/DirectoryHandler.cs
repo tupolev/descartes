@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -198,6 +199,55 @@ namespace descartes {
             catch (Exception ex) {
                 Debug.WriteLine(ex.Message);
             }
+        }
+
+        public Hashtable getProcessStats() { 
+            Hashtable values = new Hashtable();
+            Int32 input = 0;
+            foreach (Image img in this.inputList.getList())
+                foreach (File file in img.getFiles())
+                    input++;
+
+            Int32 selected = 0;
+            foreach (Image img in this.selectedList.getList())
+                foreach (File file in img.getFiles())
+                    selected++;
+
+            Int32 discarded = 0;
+            foreach (Image img in this.discardedList.getList())
+                foreach (File file in img.getFiles())
+                    discarded++;
+
+            values.Add("input", input);
+            values.Add("selected", selected);
+            values.Add("discarded", discarded);
+            values.Add("ignored", (input - (selected + discarded)));
+
+            return values; 
+        }
+
+        public void openExplorerWindow(string directory = @"c:\") {
+            var runExplorer = new System.Diagnostics.ProcessStartInfo();
+            runExplorer.FileName = "explorer.exe";
+            runExplorer.Arguments = directory;
+            System.Diagnostics.Process.Start(runExplorer); 
+        }
+
+        public Boolean cleanupProcessVars() {
+            Boolean ret = true;
+            try
+            {
+                this.inputList.getList().Clear();
+                this.selectedList.getList().Clear();
+                this.discardedList.getList().Clear();
+                this.OutputDiscardedPath = "";
+                this.OutputSelectedPath = "";
+                this.Path = "";
+            }
+            catch (Exception ex) {
+                ret = false;
+            }
+            return ret;
         }
     }
 

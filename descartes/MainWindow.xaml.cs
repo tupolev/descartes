@@ -79,6 +79,7 @@ namespace descartes
             labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
             tabItemProcess.IsEnabled = true;
             tabItemOutput.IsEnabled = true;
+            checkInputListBounds();
             tabItemProcess.Focus();
         }
 
@@ -192,6 +193,7 @@ namespace descartes
         private void buttonSelect_Click(object sender, RoutedEventArgs e)
         {
             dh.inputList.selectCurrent();
+            dh.removeFromDiscardedList(dh.inputList.getList().ElementAt(dh.inputList.Current));
             dh.removeFromSelectedList(dh.inputList.getList().ElementAt(dh.inputList.Current));
             dh.addToSelectedList(dh.inputList.getList().ElementAt(dh.inputList.Current));
             setCurrentImageStatusLabel();
@@ -200,6 +202,7 @@ namespace descartes
         private void buttonDiscard_Click(object sender, RoutedEventArgs e)
         {
             dh.inputList.discardCurrent();
+            dh.removeFromSelectedList(dh.inputList.getList().ElementAt(dh.inputList.Current));
             dh.removeFromDiscardedList(dh.inputList.getList().ElementAt(dh.inputList.Current));
             dh.addToDiscardedList(dh.inputList.getList().ElementAt(dh.inputList.Current));
             setCurrentImageStatusLabel();
@@ -323,7 +326,18 @@ namespace descartes
             fileWriter.Close();
             fileWriter.Dispose();
 
-            System.Windows.Forms.MessageBox.Show("Process finished!");
+            System.Windows.Forms.MessageBox.Show("Process finished!", "Descartes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            System.Collections.Hashtable stats = dh.getProcessStats();
+            labelSummaryTotalFiles.Content = stats["input"];
+            labelSummarySelectedFiles.Content = stats["selected"];
+            labelSummaryDiscardedFiles.Content = stats["discarded"];
+            labelSummaryIgnoredFiles.Content = stats["ignored"];
+            tabItemInput.IsEnabled = false;
+            tabItemProcess.IsEnabled = false;
+            tabItemOutput.IsEnabled = false;
+            tabItemEnd.IsEnabled = true;
+            tabItemEnd.Focus();
+            
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -402,6 +416,71 @@ namespace descartes
 
             progressBarLoading.Visibility = System.Windows.Visibility.Hidden;
         }
-        
+
+        private void buttonExitNow_Click(object sender, RoutedEventArgs e)
+        {
+            descartes.App.Current.Shutdown();
+        }
+
+        private void buttonStartAgainWithNew_Click(object sender, RoutedEventArgs e)
+        {
+            cleanUpControls();
+        }
+
+        private void tabControlMain_GotFocus(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void labelSummaryOpenInputFolder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            dh.openExplorerWindow(dh.Path);
+        }
+
+        private void labelSummaryOpenSelectedFolder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            dh.openExplorerWindow(dh.OutputSelectedPath);
+        }
+
+        private void labelSummaryOpenDiscardedFolder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            dh.openExplorerWindow(dh.OutputDiscardedPath);
+        }
+
+        private Boolean cleanUpControls() {
+            Boolean ret = true;
+            ret = dh.cleanupProcessVars();
+            progressBarOutputProcess.Value = 0;
+            progressBarOutputProcess.Maximum = 0;
+            listViewDiscardedImages.Items.Clear();
+            listViewSelectedImages.Items.Clear();
+            imageCurrent.Source = null;
+            imagePrev.Source = null;
+            imageNext.Source = null;
+            buttonPrevImage.IsEnabled = false;
+            buttonNextImage.IsEnabled = false;
+            listViewFilesFound.Items.Clear();
+            labelNumFiles.Content = "0";
+            textBoxOutputDiscardedFolder.Text =@"c:\";
+            textBoxOutputSelectedFolder.Text = @"c:\";
+            textBoxInputFolder.Text = @"c:\";
+            buttonStartProcess.IsEnabled = false;
+            tabItemInput.IsEnabled = true;
+            tabItemProcess.IsEnabled = false;
+            tabItemOutput.IsEnabled = false;
+            tabItemEnd.IsEnabled = false;
+            tabItemInput.Focus();
+            return ret;
+        }
+
+        private void buttonStartAgainWithSelected_Click(object sender, RoutedEventArgs e)
+        {
+            cleanUpControls();
+        }
+
+        private void buttonStartAgainWithDiscarded_Click(object sender, RoutedEventArgs e)
+        {
+            cleanUpControls();
+        }
     }
 }

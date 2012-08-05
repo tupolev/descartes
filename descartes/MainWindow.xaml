@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Descartes" Icon="/descartes;component/Images/Annotate_Default.ico" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="562" d:DesignWidth="814" SizeToContent="WidthAndHeight" MinWidth="1020" MinHeight="700" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" Height="700" Width="1020" SizeChanged="Window_SizeChanged">
-    <TabControl ClipToBounds="False" Name="tabControlMain" UseLayoutRounding="True" Height="670" Width="1001" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <TabControl ClipToBounds="False" Name="tabControlMain" UseLayoutRounding="True" Height="670" Width="1001" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" GotFocus="tabControlMain_GotFocus">
         <TabControl.ItemBindingGroup>
             <BindingGroup />
         </TabControl.ItemBindingGroup>
@@ -51,7 +51,7 @@
                 <Label FontSize="8" FontWeight="Normal" Height="27" HorizontalAlignment="Left" Margin="7,114,0,0" Name="labelPrevImageFilename" VerticalAlignment="Top" Width="137" />
             </Grid>
         </TabItem>
-        <TabItem FontSize="16" FontWeight="Bold" Header="Step 3: The ouput" Name="tabItemOutput" IsEnabled="False">
+        <TabItem FontSize="16" FontWeight="Bold" Header="Step 3: The output" Name="tabItemOutput" IsEnabled="False">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <GroupBox Header="Selected images" Height="539" HorizontalAlignment="Left" Margin="13,13,0,0" Name="groupBox1" VerticalAlignment="Top" Width="464">
                     <Grid>
@@ -91,6 +91,30 @@
                 </GroupBox>
                 <ProgressBar Height="36" HorizontalAlignment="Left" Margin="184,571,0,0" Name="progressBarOutputProcess" VerticalAlignment="Top" Width="780" />
                 <Button Content="End process" Height="36" HorizontalAlignment="Left" Margin="19,571,0,0" Name="buttonEndProcess" VerticalAlignment="Top" Width="133" Click="buttonEndProcess_Click" Cursor="Hand" />
+            </Grid>
+        </TabItem>
+        <TabItem Name="tabItemEnd" Header="Step 4: The end" IsEnabled="False" FontWeight="Bold" FontSize="16">
+            <Grid Height="606" Name="gridStep4" Width="966">
+                <GroupBox Header="Summary" Height="278" HorizontalAlignment="Left" Margin="34,23,0,0" Name="groupBox3" VerticalAlignment="Top" Width="341">
+                    <Grid Height="251">
+                        <Label Content="0" Height="28" HorizontalAlignment="Left" Margin="6,6,0,0" Name="labelSummaryTotalFiles" VerticalAlignment="Top" BorderBrush="Gray" BorderThickness="1" FontSize="14" Width="71" />
+                        <Label Content="0" Height="28" HorizontalAlignment="Left" Margin="6,40,0,0" Name="labelSummarySelectedFiles" VerticalAlignment="Top" BorderBrush="Gray" BorderThickness="1" FontSize="14" Width="71" />
+                        <Label Content="0" Height="28" HorizontalAlignment="Left" Margin="6,74,0,0" Name="labelSummaryDiscardedFiles" VerticalAlignment="Top" BorderBrush="Gray" BorderThickness="1" FontSize="14" Width="71" />
+                        <Label Content="0" Height="28" HorizontalAlignment="Left" Margin="6,108,0,0" Name="labelSummaryIgnoredFiles" VerticalAlignment="Top" BorderBrush="Gray" BorderThickness="1" FontSize="14" Width="71" />
+                        <Label Content="Total files" Height="28" HorizontalAlignment="Left" Margin="83,6,0,0" Name="label10" VerticalAlignment="Top" />
+                        <Label Content="Selected files" Height="28" HorizontalAlignment="Left" Margin="83,40,0,0" Name="label11" VerticalAlignment="Top" />
+                        <Label Content="Discarded files" Height="28" HorizontalAlignment="Left" Margin="83,74,0,0" Name="label12" VerticalAlignment="Top" />
+                        <Label Content="Ignored files" Height="37" HorizontalAlignment="Left" Margin="83,108,0,0" Name="label13" VerticalAlignment="Top" />
+                        <Label Content="Click to open input files folder" Height="36" HorizontalAlignment="Left" Margin="0,142,0,0" Name="labelSummaryOpenInputFolder" VerticalAlignment="Top" MouseLeftButtonUp="labelSummaryOpenInputFolder_MouseLeftButtonUp" Cursor="Hand" />
+                        <Label Content="Click to open selected files folder" Height="36" HorizontalAlignment="Left" Margin="0,176,0,0" Name="labelSummaryOpenSelectedFolder" VerticalAlignment="Top" MouseLeftButtonUp="labelSummaryOpenSelectedFolder_MouseLeftButtonUp" Cursor="Hand" />
+                        <Label Content="Click to open discarded files folder" Height="35" HorizontalAlignment="Left" Margin="0,210,0,0" Name="labelSummaryOpenDiscardedFolder" VerticalAlignment="Top" MouseLeftButtonUp="labelSummaryOpenDiscardedFolder_MouseLeftButtonUp" Cursor="Hand" />
+                    </Grid>
+                </GroupBox>
+                <Label Content="What do you want to do next?" Height="41" HorizontalAlignment="Left" Margin="34,344,0,0" Name="label1" VerticalAlignment="Top" FontSize="22" Width="419" BorderThickness="0,0,0,1" BorderBrush="Blue" />
+                <Button Content="   Start again, using selected files as input" Height="34" HorizontalAlignment="Left" Margin="38,407,0,0" Name="buttonStartAgainWithSelected" VerticalAlignment="Top" Width="415" HorizontalContentAlignment="Left" Cursor="Hand" Click="buttonStartAgainWithSelected_Click" />
+                <Button Content="   Start again, using discarded files as input" Height="34" HorizontalAlignment="Left" Margin="38,447,0,0" Name="buttonStartAgainWithDiscarded" VerticalAlignment="Top" Width="415" HorizontalContentAlignment="Left" Cursor="Hand" Click="buttonStartAgainWithDiscarded_Click" />
+                <Button Content="   Start again, using a new input folder" Height="34" HorizontalAlignment="Left" Margin="38,487,0,0" Name="buttonStartAgainWithNew" VerticalAlignment="Top" Width="415" HorizontalContentAlignment="Left" Click="buttonStartAgainWithNew_Click" Cursor="Hand" />
+                <Button Content="   Exit Descartes now" Height="34" HorizontalAlignment="Left" Margin="38,527,0,0" Name="buttonExitNow" VerticalAlignment="Top" Width="415" HorizontalContentAlignment="Left" Click="buttonExitNow_Click" Cursor="Hand" />
             </Grid>
         </TabItem>
     </TabControl>
