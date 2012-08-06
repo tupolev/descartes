@@ -21,6 +21,7 @@ namespace descartes
     public partial class MainWindow : Window
     {
         public DirectoryHandler dh;
+        public System.Threading.Thread th;
         public BitmapImage unavailableImage, prevImage, nextImage, currentImage;
         public String app_path;
         public MainWindow()
@@ -28,6 +29,7 @@ namespace descartes
             InitializeComponent();
             app_path = System.Reflection.Assembly.GetExecutingAssembly().Location;
             unavailableImage = new BitmapImage(new Uri(System.IO.Path.GetDirectoryName(app_path) + @"\Images\no.gif"));
+            
         }
 
         private void buttonBrowse_Click(object sender, RoutedEventArgs e)
@@ -281,62 +283,19 @@ namespace descartes
             dh.SelectedFilesListFileFullName = dh.OutputSelectedPath + @"\..\descartes.selected.lst";
             dh.KeepCopyOfDiscardedFiles = (comboBoxDiscardedImagesMoveCopy.SelectedIndex == 2);
             dh.KeepCopyOfSelectedFiles = (comboBoxSelectedImagesMoveCopy.SelectedIndex == 2);
+            
+            
+            //Listener l = new Listener();
+            //l.Subscribe(dh);
+            dh.Progress += new DirectoryHandler.ProgressHandler(onSeparateFilesProgress);
+            dh.Finish += new DirectoryHandler.ProgressHandler(onSeparateFilesFinish);
+            //th = new System.Threading.Thread(dh.separateFiles);
+            dh.separateFiles();
+            //th.Start();
 
-            if (dh.GenerateFileStructureForDiscardedFiles || dh.GenerateFileStructureForSelectedFiles)
-                dh.checkAndCreateOutputDirs();
 
-            //start collect process with discarded files
-            StreamWriter fileWriter = new StreamWriter(dh.DiscardedFilesListFileFullName);
-            foreach (Image item in dh.discardedList.getList()) {
-                foreach (File file in item.getFiles()) {
-                    //write discarded files list file
-                    if (dh.GenerateListFileForDiscardedFiles)
-                        fileWriter.WriteLine(file.Name);
-                    
-                    //write discarded files structure
-                    if (dh.GenerateFileStructureForDiscardedFiles) {
-                        file.move(dh.OutputDiscardedPath + @"\" + file.Name, dh.KeepCopyOfDiscardedFiles);     
-                    }
-                    progressBarOutputProcess.Value++;
-                    progressBarOutputProcess.UpdateLayout();
-                }
-            }
-            fileWriter.Flush();
-            fileWriter.Close();
-            fileWriter.Dispose();
 
-            //next collect process with selected files
-            fileWriter = new StreamWriter(dh.SelectedFilesListFileFullName);
-            foreach (Image item in dh.selectedList.getList()) {
-                foreach (File file in item.getFiles()) {
-                    //selectedFilesPlainList.Add(file.ToString());
-                    if (dh.GenerateListFileForSelectedFiles)
-                        fileWriter.WriteLine(file.Name);
-
-                    if (dh.GenerateFileStructureForSelectedFiles) {
-                        //write selected files structure
-                        file.move(dh.OutputSelectedPath + @"\" + file.Name, dh.KeepCopyOfSelectedFiles);  
-                    }
-
-                    progressBarOutputProcess.Value++;
-                    progressBarOutputProcess.UpdateLayout();
-                }
-            }
-            fileWriter.Flush();
-            fileWriter.Close();
-            fileWriter.Dispose();
-
-            System.Windows.Forms.MessageBox.Show("Process finished!", "Descartes", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            System.Collections.Hashtable stats = dh.getProcessStats();
-            labelSummaryTotalFiles.Content = stats["input"];
-            labelSummarySelectedFiles.Content = stats["selected"];
-            labelSummaryDiscardedFiles.Content = stats["discarded"];
-            labelSummaryIgnoredFiles.Content = stats["ignored"];
-            tabItemInput.IsEnabled = false;
-            tabItemProcess.IsEnabled = false;
-            tabItemOutput.IsEnabled = false;
-            tabItemEnd.IsEnabled = true;
-            tabItemEnd.Focus();
+            
             
         }
 
@@ -481,6 +440,33 @@ namespace descartes
         private void buttonStartAgainWithDiscarded_Click(object sender, RoutedEventArgs e)
         {
             cleanUpControls();
+        }
+
+        public void onSeparateFilesProgress(DirectoryHandler dh, ProgressEventArgs e)
+        {
+            progressBarOutputProcess.Value++;
+            progressBarOutputProcess.UpdateLayout();
+            System.Diagnostics.Debug.Print("+");
+        }
+
+        public void onSeparateFilesFinish(DirectoryHandler dh, ProgressEventArgs e)
+        {
+            System.Diagnostics.Debug.Print("FIN");
+            //System.Windows.Forms.MessageBox.Show(th.ThreadState.ToString());
+            progressBarOutputProcess.Value++;
+            progressBarOutputProcess.UpdateLayout();
+
+            System.Windows.Forms.MessageBox.Show("Process finished!", "Descartes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            System.Collections.Hashtable stats = dh.getProcessStats();
+            labelSummaryTotalFiles.Content = stats["input"];
+            labelSummarySelectedFiles.Content = stats["selected"];
+            labelSummaryDiscardedFiles.Content = stats["discarded"];
+            labelSummaryIgnoredFiles.Content = stats["ignored"];
+            tabItemInput.IsEnabled = false;
+            tabItemProcess.IsEnabled = false;
+            tabItemOutput.IsEnabled = false;
+            tabItemEnd.IsEnabled = true;
+            tabItemEnd.Focus();
         }
     }
 }

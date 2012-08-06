@@ -8,6 +8,16 @@ using System.Diagnostics;
 
 namespace descartes {
     public class DirectoryHandler {
+
+        public event ProgressHandler Progress;
+        public event ProgressHandler Finish;
+
+        public delegate void ProgressHandler(DirectoryHandler m, ProgressEventArgs e);
+        //public delegate void FinishHandler(DirectoryHandler m, ProgressEventArgs e);
+        
+        
+        
+        
         private String path = "";
         public String Path
         {
@@ -249,6 +259,95 @@ namespace descartes {
             }
             return ret;
         }
+
+        public void separateFiles()
+        {
+            Boolean ret = true;
+            Int32 totalFiles = 0;
+            try
+            {
+                if (this.GenerateFileStructureForDiscardedFiles || this.GenerateFileStructureForSelectedFiles)
+                    this.checkAndCreateOutputDirs();
+
+                //start collect process with discarded files
+                StreamWriter fileWriter = new StreamWriter(this.DiscardedFilesListFileFullName);
+                foreach (Image item in this.discardedList.getList())
+                {
+                    foreach (File file in item.getFiles())
+                    {
+                        //write discarded files list file
+                        if (this.GenerateListFileForDiscardedFiles)
+                            fileWriter.WriteLine(file.Name);
+
+                        //write discarded files structure
+                        if (this.GenerateFileStructureForDiscardedFiles)
+                        {
+                            file.move(this.OutputDiscardedPath + @"\" + file.Name, this.KeepCopyOfDiscardedFiles);
+                        }
+                        totalFiles++;
+
+                        if (Progress != null)
+                        {
+                            ProgressEventArgs progress = new ProgressEventArgs();
+                            progress.Progress = totalFiles;
+                            Progress(this, progress);
+                        }
+
+                        //progressBar.Value++;
+                        //progressBar.Update();
+                    }
+                }
+                fileWriter.Flush();
+                fileWriter.Close();
+                fileWriter.Dispose();
+
+                //next collect process with selected files
+                fileWriter = new StreamWriter(this.SelectedFilesListFileFullName);
+                foreach (Image item in this.selectedList.getList())
+                {
+                    foreach (File file in item.getFiles())
+                    {
+                        //selectedFilesPlainList.Add(file.ToString());
+                        if (this.GenerateListFileForSelectedFiles)
+                            fileWriter.WriteLine(file.Name);
+
+                        if (this.GenerateFileStructureForSelectedFiles)
+                        {
+                            //write selected files structure
+                            file.move(this.OutputSelectedPath + @"\" + file.Name, this.KeepCopyOfSelectedFiles);
+                        }
+                        totalFiles++;
+
+                        if (Progress != null)
+                        {
+                            ProgressEventArgs progress = new ProgressEventArgs();
+                            progress.Progress = totalFiles;
+                            Progress(this, progress);
+                        }
+                        //progressBar.Value++;
+                        //progressBar.Update();
+                    }
+                }
+                fileWriter.Flush();
+                fileWriter.Close();
+                fileWriter.Dispose();
+                
+                if (Finish != null)
+                {
+                    ProgressEventArgs progress = new ProgressEventArgs();
+                    progress.Progress = totalFiles;
+                    progress.Data.Add("totalFiles",totalFiles);
+                    Finish(this, progress);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                
+                ret = false;
+            }
+            //return ret;
+        }
     }
 
     public class File {
@@ -371,4 +470,26 @@ namespace descartes {
         }
     }
 
+
+    public class ProgressEventArgs : EventArgs {
+        private Int32 progress = 0;
+        public Int32 Progress
+        {
+            get { return progress; }
+            set { progress = value; }
+        }
+
+        private Hashtable data;
+        public Hashtable Data
+        {
+            get { return data; }
+            set { data = value; }
+        }
+
+        public ProgressEventArgs()
+        {
+            // TODO: Complete member initialization
+            this.Data = new Hashtable();
+        }
+    }
 }
