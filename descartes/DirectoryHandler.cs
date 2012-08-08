@@ -291,10 +291,8 @@ namespace descartes {
                             ProgressEventArgs progress = new ProgressEventArgs();
                             progress.Progress = totalFiles;
                             Progress(this, progress);
-                        }
 
-                        //progressBar.Value++;
-                        //progressBar.Update();
+                        }
                     }
                 }
                 fileWriter.Flush();

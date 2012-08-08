@@ -29,7 +29,7 @@ namespace descartes
             InitializeComponent();
             app_path = System.Reflection.Assembly.GetExecutingAssembly().Location;
             unavailableImage = new BitmapImage(new Uri(System.IO.Path.GetDirectoryName(app_path) + @"\Images\no.gif"));
-            
+
         }
 
         private void buttonBrowse_Click(object sender, RoutedEventArgs e)
@@ -40,9 +40,9 @@ namespace descartes
                 textBoxInputFolder.Text = folderBrowser.SelectedPath;
                 textBoxOutputSelectedFolder.Text = textBoxInputFolder.Text + @"\selected\";
                 textBoxOutputDiscardedFolder.Text = textBoxInputFolder.Text + @"\discarded\";
-            
-                this.buttonReloadFilesFound_Click(sender, e);   
-               
+
+                this.buttonReloadFilesFound_Click(sender, e);
+
             }
         }
 
@@ -51,7 +51,7 @@ namespace descartes
             if (Directory.Exists(textBoxInputFolder.Text))
             {
                 textBoxInputFolder.Background = Brushes.LightGreen;
-                if (buttonStartProcess != null)  this.buttonStartProcess.IsEnabled = true;
+                if (buttonStartProcess != null) this.buttonStartProcess.IsEnabled = true;
             }
             else
             {
@@ -62,7 +62,7 @@ namespace descartes
 
         private void buttonStartProcess_Click(object sender, RoutedEventArgs e)
         {
-            
+
             dh.inputList.Current = 0;
             imagePrev.Source = unavailableImage;
 
@@ -85,7 +85,7 @@ namespace descartes
             tabItemProcess.Focus();
         }
 
-        
+
 
         private void buttonPrevImage_Click(object sender, RoutedEventArgs e)
         {
@@ -107,15 +107,15 @@ namespace descartes
                 currentImage = null;
                 currentImage = (System.IO.File.Exists(pathCurr)) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
                 imageCurrent.Source = currentImage;
-                currentImage = null; 
+                currentImage = null;
                 labelCurrentImageFilename.Content = pathCurr;
                 setCurrentImageStatusLabel();
-                
+
                 String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
                 nextImage = null;
                 nextImage = (System.IO.File.Exists(pathNext)) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
                 imageNext.Source = nextImage;
-                prevImage = null; 
+                prevImage = null;
                 labelNextImageFilename.Content = pathNext;
             }
             else
@@ -131,7 +131,7 @@ namespace descartes
         {
             System.Windows.Input.Cursor oldCursor = this.Cursor;
             this.Cursor = System.Windows.Input.Cursors.AppStarting;
-            
+
             if ((Int32)dh.inputList.Current < dh.inputList.count()
                 && (Int32)dh.inputList.Current >= 0)
             {
@@ -159,7 +159,8 @@ namespace descartes
                 prevImage = null;
                 labelNextImageFilename.Content = pathNext;
             }
-            else {
+            else
+            {
                 imagePrev.Source = unavailableImage;
             }
             labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
@@ -167,19 +168,21 @@ namespace descartes
             this.Cursor = oldCursor;
         }
 
-        private void checkInputListBounds() { 
+        private void checkInputListBounds()
+        {
             //check prev button
             if (dh.inputList.count() > 0 && (Int32)dh.inputList.Current != 0)
             {
                 buttonPrevImage.IsEnabled = true;
             }
-            else {
-                buttonPrevImage.IsEnabled = false;    
+            else
+            {
+                buttonPrevImage.IsEnabled = false;
             }
 
             //check next button
             if (dh.inputList.count() > 0
-                    && (Int32)dh.inputList.Current < dh.inputList.count() -1
+                    && (Int32)dh.inputList.Current < dh.inputList.count() - 1
                 )
             {
                 buttonNextImage.IsEnabled = true;
@@ -211,11 +214,13 @@ namespace descartes
         }
 
 
-        private String getCurrentImagePositionCaption() {
+        private String getCurrentImagePositionCaption()
+        {
             return "(" + (dh.inputList.Current + 1).ToString() + " of " + dh.inputList.count().ToString() + ")";
         }
 
-        private void setCurrentImageStatusLabel() {
+        private void setCurrentImageStatusLabel()
+        {
             if (dh.inputList.getList().ElementAt(dh.inputList.Current).Status.Equals("selected"))
             {
 
@@ -227,9 +232,10 @@ namespace descartes
                 labelCurrentImageStatus.Foreground = Brushes.Red;
                 labelCurrentImageStatus.Content = "DISCARDED";
             }
-            else {
+            else
+            {
                 labelCurrentImageStatus.Foreground = Brushes.DarkGray;
-                labelCurrentImageStatus.Content = "UNRATED";            
+                labelCurrentImageStatus.Content = "UNRATED";
             }
         }
 
@@ -271,31 +277,26 @@ namespace descartes
             tabItemOutput.Focus();
         }
 
-        private void buttonEndProcess_Click(object sender, RoutedEventArgs e) {
+        private void buttonEndProcess_Click(object sender, RoutedEventArgs e)
+        {
+
             progressBarOutputProcess.Minimum = 0;
             progressBarOutputProcess.Maximum = dh.discardedList.count() + dh.selectedList.count();
 
             dh.GenerateListFileForSelectedFiles = (comboBoxSelectedImagesOutputFormat.SelectedIndex == 1 || comboBoxSelectedImagesOutputFormat.SelectedIndex == 2);
             dh.GenerateListFileForDiscardedFiles = (comboBoxDiscardedImagesOutputFormat.SelectedIndex == 1 || comboBoxDiscardedImagesOutputFormat.SelectedIndex == 2);
-            dh.GenerateFileStructureForSelectedFiles = (comboBoxSelectedImagesOutputFormat.SelectedIndex == 0|| comboBoxSelectedImagesOutputFormat.SelectedIndex == 2);
+            dh.GenerateFileStructureForSelectedFiles = (comboBoxSelectedImagesOutputFormat.SelectedIndex == 0 || comboBoxSelectedImagesOutputFormat.SelectedIndex == 2);
             dh.GenerateFileStructureForDiscardedFiles = (comboBoxDiscardedImagesOutputFormat.SelectedIndex == 0 || comboBoxDiscardedImagesOutputFormat.SelectedIndex == 2);
             dh.DiscardedFilesListFileFullName = dh.OutputDiscardedPath + @"\..\descartes.discarded.lst";
             dh.SelectedFilesListFileFullName = dh.OutputSelectedPath + @"\..\descartes.selected.lst";
             dh.KeepCopyOfDiscardedFiles = (comboBoxDiscardedImagesMoveCopy.SelectedIndex == 2);
             dh.KeepCopyOfSelectedFiles = (comboBoxSelectedImagesMoveCopy.SelectedIndex == 2);
+
+
             
-            
-            //Listener l = new Listener();
-            //l.Subscribe(dh);
             dh.Progress += new DirectoryHandler.ProgressHandler(onSeparateFilesProgress);
             dh.Finish += new DirectoryHandler.ProgressHandler(onSeparateFilesFinish);
-            //th = new System.Threading.Thread(dh.separateFiles);
             dh.separateFiles();
-            //th.Start();
-
-
-
-            
             
         }
 
@@ -388,7 +389,7 @@ namespace descartes
 
         private void tabControlMain_GotFocus(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void labelSummaryOpenInputFolder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -406,7 +407,8 @@ namespace descartes
             dh.openExplorerWindow(dh.OutputDiscardedPath);
         }
 
-        private Boolean cleanUpControls() {
+        private Boolean cleanUpControls()
+        {
             Boolean ret = true;
             ret = dh.cleanupProcessVars();
             progressBarOutputProcess.Value = 0;
@@ -420,7 +422,7 @@ namespace descartes
             buttonNextImage.IsEnabled = false;
             listViewFilesFound.Items.Clear();
             labelNumFiles.Content = "0";
-            textBoxOutputDiscardedFolder.Text =@"c:\";
+            textBoxOutputDiscardedFolder.Text = @"c:\";
             textBoxOutputSelectedFolder.Text = @"c:\";
             textBoxInputFolder.Text = @"c:\";
             buttonStartProcess.IsEnabled = false;
@@ -441,20 +443,20 @@ namespace descartes
         {
             cleanUpControls();
         }
-
+        delegate void SetTextCallback(string text);
         public void onSeparateFilesProgress(DirectoryHandler dh, ProgressEventArgs e)
         {
             progressBarOutputProcess.Value++;
-            progressBarOutputProcess.UpdateLayout();
+            //progressBarOutputProcess.UpdateLayout();
             System.Diagnostics.Debug.Print("+");
+            System.Windows.Forms.Application.DoEvents();
         }
 
         public void onSeparateFilesFinish(DirectoryHandler dh, ProgressEventArgs e)
         {
             System.Diagnostics.Debug.Print("FIN");
-            //System.Windows.Forms.MessageBox.Show(th.ThreadState.ToString());
-            progressBarOutputProcess.Value++;
-            progressBarOutputProcess.UpdateLayout();
+            //progressBarOutputProcess.Value++;
+            //progressBarOutputProcess.UpdateLayout();
 
             System.Windows.Forms.MessageBox.Show("Process finished!", "Descartes", MessageBoxButtons.OK, MessageBoxIcon.Information);
             System.Collections.Hashtable stats = dh.getProcessStats();
@@ -468,5 +470,6 @@ namespace descartes
             tabItemEnd.IsEnabled = true;
             tabItemEnd.Focus();
         }
+
     }
 }
