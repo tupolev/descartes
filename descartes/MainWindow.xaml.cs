@@ -71,13 +71,13 @@ namespace descartes
 
             String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
             imageCurrent.Source = System.IO.File.Exists(pathCurr) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
-            labelCurrentImageFilename.Content = pathCurr;
+            labelCurrentImageFilename.Content = System.IO.Path.GetFileName(pathCurr);
             setCurrentImageStatusLabel();
 
             String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
             BitmapImage bmp = System.IO.File.Exists(pathNext) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
             imageNext.Source = bmp;
-            labelNextImageFilename.Content = pathNext;
+            labelNextImageFilename.Content = System.IO.Path.GetFileName(pathNext);
             labelCurrentImagePositionInList.Content = getCurrentImagePositionCaption();
             tabItemProcess.IsEnabled = true;
             tabItemOutput.IsEnabled = true;
@@ -101,14 +101,14 @@ namespace descartes
                 prevImage = (System.IO.File.Exists(pathPrev)) ? new BitmapImage(new Uri(pathPrev)) : unavailableImage;
                 imagePrev.Source = prevImage;
                 prevImage = null;
-                labelPrevImageFilename.Content = pathPrev;
+                labelPrevImageFilename.Content = System.IO.Path.GetFileName(pathPrev);
 
                 String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
                 currentImage = null;
                 currentImage = (System.IO.File.Exists(pathCurr)) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
                 imageCurrent.Source = currentImage;
                 currentImage = null;
-                labelCurrentImageFilename.Content = pathCurr;
+                labelCurrentImageFilename.Content = System.IO.Path.GetFileName(pathCurr);
                 setCurrentImageStatusLabel();
 
                 String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
@@ -116,7 +116,7 @@ namespace descartes
                 nextImage = (System.IO.File.Exists(pathNext)) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
                 imageNext.Source = nextImage;
                 prevImage = null;
-                labelNextImageFilename.Content = pathNext;
+                labelNextImageFilename.Content = System.IO.Path.GetFileName(pathNext);
             }
             else
             {
@@ -142,14 +142,14 @@ namespace descartes
                 prevImage = (System.IO.File.Exists(pathPrev)) ? new BitmapImage(new Uri(pathPrev)) : unavailableImage;
                 imagePrev.Source = prevImage;
                 prevImage = null;
-                labelPrevImageFilename.Content = pathPrev;
+                labelPrevImageFilename.Content = System.IO.Path.GetFileName(pathPrev);
 
                 String pathCurr = dh.getImagePathForItem(dh.inputList.Current, ".JPG");
                 currentImage = null;
                 currentImage = (System.IO.File.Exists(pathCurr)) ? new BitmapImage(new Uri(pathCurr)) : unavailableImage;
                 imageCurrent.Source = currentImage;
                 currentImage = null;
-                labelCurrentImageFilename.Content = pathCurr;
+                labelCurrentImageFilename.Content = System.IO.Path.GetFileName(pathCurr);
                 setCurrentImageStatusLabel();
 
                 String pathNext = dh.getImagePathForItem(dh.inputList.Current + 1, ".JPG");
@@ -157,7 +157,7 @@ namespace descartes
                 nextImage = (System.IO.File.Exists(pathNext)) ? new BitmapImage(new Uri(pathNext)) : unavailableImage;
                 imageNext.Source = nextImage;
                 prevImage = null;
-                labelNextImageFilename.Content = pathNext;
+                labelNextImageFilename.Content = System.IO.Path.GetFileName(pathNext);
             }
             else
             {
@@ -300,11 +300,31 @@ namespace descartes
             
         }
 
+        private void dyn_resize() {
+            tabControlMain.Width = this.ActualWidth - 20;
+            tabControlMain.Height = this.ActualHeight - 30;
+            List<Grid> grids = new List<Grid>();
+            grids.Add(gridTabInput);
+            grids.Add(gridTabProcess);
+            grids.Add(gridTabOutput);
+            grids.Add(gridTabEnd);
+
+            grids.ForEach(x =>
+            {
+                x.Width = tabControlMain.ActualWidth - 5;
+                x.Height = tabControlMain.ActualHeight - tabItemInput.ActualHeight - 5;
+            });
+
+            //foreach (Grid tab in tabControlMain.Items) { 
+            //    tab.Width = tabControlMain.ActualWidth -50;
+            //    tab.Height = tabControlMain.ActualHeight -50;
+            //}
+            this.UpdateLayout();
+        }
+
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //tabControlMain.Width = this.Width;
-            //tabControlMain.Height = this.Height;
-            //this.UpdateLayout();
+            this.dyn_resize();          
         }
 
         private void buttonBrowseSelectedFolder_Click(object sender, RoutedEventArgs e)
@@ -469,6 +489,11 @@ namespace descartes
             tabItemOutput.IsEnabled = false;
             tabItemEnd.IsEnabled = true;
             tabItemEnd.Focus();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.dyn_resize();
         }
 
     }
