@@ -1,7 +1,7 @@
 ﻿<Window x:Class="descartes.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Descartes" Icon="/descartes;component/Images/Annotate_Default.ico" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" MinWidth="1020" MinHeight="700" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" Height="700" Width="1020" SizeChanged="Window_SizeChanged" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Center" HorizontalAlignment="Center" Loaded="Window_Loaded">
+        Title="Descartes" Icon="/descartes;component/Images/Annotate_Default.ico" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" MinWidth="1020" MinHeight="700" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" Height="700" Width="1020" SizeChanged="Window_SizeChanged" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Center" HorizontalAlignment="Center" StateChanged="Window_StateChanged">
     <TabControl ClipToBounds="True" Name="tabControlMain" UseLayoutRounding="True" Height="670" Width="1001" GotFocus="tabControlMain_GotFocus" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
         <TabControl.BindingGroup>
             <BindingGroup />
@@ -29,7 +29,7 @@
                 <Button Content="Reload" Cursor="Hand" Height="40" Margin="887,185,0,0" Name="buttonReloadFilesFound" VerticalAlignment="Top" Click="buttonReloadFilesFound_Click" MinHeight="40" MaxHeight="40" Width="80" MinWidth="80" MaxWidth="80" HorizontalAlignment="Left" />
             </Grid>
         </TabItem>
-        <TabItem FontSize="16" FontWeight="Bold" Header="Step 2: The process" Name="tabItemProcess" IsEnabled="False" IsSelected="True">
+        <TabItem FontSize="16" FontWeight="Bold" Header="Step 2: The process" Name="tabItemProcess" IsEnabled="False" IsSelected="False">
             <Grid Height="630" Name="gridTabProcess" Width="996" ClipToBounds="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="524*" />

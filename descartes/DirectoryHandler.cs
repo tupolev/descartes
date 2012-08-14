@@ -13,10 +13,6 @@ namespace descartes {
         public event ProgressHandler Finish;
 
         public delegate void ProgressHandler(DirectoryHandler m, ProgressEventArgs e);
-        //public delegate void FinishHandler(DirectoryHandler m, ProgressEventArgs e);
-        
-        
-        
         
         private String path = "";
         public String Path
@@ -322,8 +318,6 @@ namespace descartes {
                             progress.Progress = totalFiles;
                             Progress(this, progress);
                         }
-                        //progressBar.Value++;
-                        //progressBar.Update();
                     }
                 }
                 fileWriter.Flush();

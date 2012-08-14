@@ -29,7 +29,6 @@ namespace descartes
             InitializeComponent();
             app_path = System.Reflection.Assembly.GetExecutingAssembly().Location;
             unavailableImage = new BitmapImage(new Uri(System.IO.Path.GetDirectoryName(app_path) + @"\Images\no.gif"));
-
         }
 
         private void buttonBrowse_Click(object sender, RoutedEventArgs e)
@@ -300,32 +299,7 @@ namespace descartes
             
         }
 
-        private void dyn_resize() {
-            tabControlMain.Width = this.ActualWidth - 20;
-            tabControlMain.Height = this.ActualHeight - 30;
-            List<Grid> grids = new List<Grid>();
-            grids.Add(gridTabInput);
-            grids.Add(gridTabProcess);
-            grids.Add(gridTabOutput);
-            grids.Add(gridTabEnd);
 
-            grids.ForEach(x =>
-            {
-                x.Width = tabControlMain.ActualWidth - 5;
-                x.Height = tabControlMain.ActualHeight - tabItemInput.ActualHeight - 5;
-            });
-
-            //foreach (Grid tab in tabControlMain.Items) { 
-            //    tab.Width = tabControlMain.ActualWidth -50;
-            //    tab.Height = tabControlMain.ActualHeight -50;
-            //}
-            this.UpdateLayout();
-        }
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            this.dyn_resize();          
-        }
 
         private void buttonBrowseSelectedFolder_Click(object sender, RoutedEventArgs e)
         {
@@ -454,29 +428,39 @@ namespace descartes
             return ret;
         }
 
+        private void loadPreset(string initialDir) {
+            textBoxInputFolder.Text = initialDir;
+            textBoxOutputSelectedFolder.Text = textBoxInputFolder.Text + @"selected\";
+            textBoxOutputDiscardedFolder.Text = textBoxInputFolder.Text + @"discarded\";
+            this.buttonReloadFilesFound_Click(null, null);
+            tabItemInput.Focus();
+        }
         private void buttonStartAgainWithSelected_Click(object sender, RoutedEventArgs e)
         {
+            string dir = dh.OutputSelectedPath;
             cleanUpControls();
+            this.loadPreset(dir);
         }
 
         private void buttonStartAgainWithDiscarded_Click(object sender, RoutedEventArgs e)
         {
+            string dir = dh.OutputDiscardedPath;
             cleanUpControls();
+            this.loadPreset(dir);
         }
+
         delegate void SetTextCallback(string text);
         public void onSeparateFilesProgress(DirectoryHandler dh, ProgressEventArgs e)
         {
             progressBarOutputProcess.Value++;
-            //progressBarOutputProcess.UpdateLayout();
-            System.Diagnostics.Debug.Print("+");
+            progressBarOutputProcess.UpdateLayout();
             System.Windows.Forms.Application.DoEvents();
         }
 
         public void onSeparateFilesFinish(DirectoryHandler dh, ProgressEventArgs e)
         {
-            System.Diagnostics.Debug.Print("FIN");
-            //progressBarOutputProcess.Value++;
-            //progressBarOutputProcess.UpdateLayout();
+            progressBarOutputProcess.Value++;
+            progressBarOutputProcess.UpdateLayout();
 
             System.Windows.Forms.MessageBox.Show("Process finished!", "Descartes", MessageBoxButtons.OK, MessageBoxIcon.Information);
             System.Collections.Hashtable stats = dh.getProcessStats();
@@ -490,11 +474,47 @@ namespace descartes
             tabItemEnd.IsEnabled = true;
             tabItemEnd.Focus();
         }
+        
+        
+        private void dyn_resize()
+        {
+            if (this.WindowState == System.Windows.WindowState.Maximized)
+            {
+                tabControlMain.Width = Screen.PrimaryScreen.WorkingArea.Width - 20;
+                tabControlMain.Height = Screen.PrimaryScreen.WorkingArea.Height - 30;
+            }
+            else {
+                tabControlMain.Width = this.RestoreBounds.Width - 20;
+                tabControlMain.Height = this.RestoreBounds.Height - 30;
+            }
+            
+            
+            List<Grid> grids = new List<Grid>();
+            grids.Add(gridTabInput);
+            grids.Add(gridTabProcess);
+            grids.Add(gridTabOutput);
+            grids.Add(gridTabEnd);
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+            grids.ForEach(x =>
+            {
+                x.Width = tabControlMain.ActualWidth - 5;
+                x.Height = tabControlMain.ActualHeight - tabItemInput.ActualHeight - 5;
+            });
+
+            this.UpdateLayout();
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.dyn_resize();
         }
+        
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            this.dyn_resize();            
+        }
+
+
 
     }
 }
